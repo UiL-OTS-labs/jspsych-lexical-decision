@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta charset="UTF-8">
+    
+    <title>Auditory Lexical Decision Experiment with masked visual prime</title>
+
+    <script src="https://web-experiments.lab.hum.uu.nl/jspsych/6.1.0/jspsych.js"></script>
+    <script src="https://web-experiments.lab.hum.uu.nl/jspsych/6.1.0/plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="https://web-experiments.lab.hum.uu.nl/jspsych/6.1.0/plugins/jspsych-html-button-response.js"></script>
+    
+    <!-- Audio playback &response libraries (audio) -->
+    <script src="https://web-experiments.lab.hum.uu.nl/jspsych/6.1.0/plugins/jspsych-audio-button-response.js"></script>
+    <script src="https://web-experiments.lab.hum.uu.nl/jspsych/6.1.0/plugins/jspsych-audio-keyboard-response.js"></script>
+    
+    <!-- Generic check/ask libraries (instructions & surveys) -->
+    <script src="https://web-experiments.lab.hum.uu.nl/jspsych/6.1.0/plugins/jspsych-instructions.js"></script>
+    <script src="https://web-experiments.lab.hum.uu.nl/jspsych/6.1.0/plugins/jspsych-survey-html-form.js"></script>
+    <script src="https://web-experiments.lab.hum.uu.nl/jspsych/6.1.0/plugins/jspsych-survey-multi-choice.js"></script>
+    
+    <!-- Generic jspsych style sheet -->
+    <link href="https://web-experiments.lab.hum.uu.nl/jspsych/6.1.0/css/jspsych.css" rel="stylesheet" type="text/css"/>
+
+    <!-- Uil OTS libraries -->
+    <script src="https://web-experiments.lab.hum.uu.nl/jspsych/uil-utils/dev/jspsych-uil-utils.js"></script>
+
+    <!-- Uil OTS scripts -->
+    <script src="stimuli.js"></script>
+    <script src="globals.js"></script>
+    <script src="instructions.js"></script>
+
+    <style>
+
+    .stimulus { 
+        font-size: 30px; 
+        font-family: monospace;
+        font-weight: normal;
+    }
+
+    .instruction {
+        text-align: left;
+        margin: 5% 10% 5% 10%;
+    }
+
+    .survey {
+        text-align: left;
+        margin: 5% 5% 5% 5%;
+    }
+
+    .jspsych-survey-multi-choice-question {
+        text-align: left !important;
+    }
+
+    .jspsych-survey-multi-choice-text {
+        text-align: left !important;
+    }
+
+    .jspsych-survey-multi-choice-option {
+        text-align: left !important;
+    }
+
+    kbd {
+        border-radius: 2px;
+        padding: 2px;
+        border: 1px solid black;
+    }
+    
+    input,
+    label {
+        margin: .4rem 0;
+    }
+
+    span::after {
+        padding-left: 5%;
+    }
+
+    input:invalid + span::after {
+        content: '✖';
+    }
+
+    input:valid+span::after {
+          content: '✓';
+    }
+
+    </style>
+    </head>
+    <body></body>
+    <script>
+    
+    // Wait till the browser has loaded all files, then execute the
+    // contents of this method
+    
+    window.addEventListener('load', function() {
+
+        let stimuli = pickRandomGroup();
+
+        // Experiment logic variables
+        // Used by survey
+        var repeat_survey = false;
+
+        // used by the keyboard validation, overly verbose...
+        var repeat_validate_left_key = false;
+        var repeat_validate_right_key = false;
+
+        var left_key_confirmed = false;
+        var right_key_confirmed = false;
+        
+        var chosen_keyboard = undefined;
+
+        // first, i'll put the preloaders here, but maybe it's better in stimuli.js?
+        
+        var beep_audio = ['./sounds/beep.mp3'];
+        
+        ////////////////////////// media preloading ///////////////////////////////////////
+
+        // create list of all audio files for preloading
+        var practice_audio = []; //here we want (path) audio files
+        let practice_items = getPracticeItems().table; //let's just have them 'again'
+        
+        for (var i=0; i< practice_items.length; i++) {
+            practice_audio.push(practice_items[i].wordfn);
+            //console.log('loaded practice audio as "practice_audio"');
+        };
+
+        // test audio list
+        var test_audio = []; // the same...
+        let test_items = stimuli.table; //let's just have them 'before'
+        
+        for (var i=0; i< test_items.length; i++) {
+            test_audio.push(test_items[i].wordfn);
+            //console.log('loaded test audio as "test_audio"');
+        };
+
+        /////////////////// functions for key setting /////////////////////////////////
+
+        function getLeftOrRightHanded()
+        {
+            let data = jsPsych.data.get().select('survey_multi_choice_responses');
+            data = JSON.parse(data.values[0]);
+            return data.HandPreference;
+        }
+
+        function getCorrectKey()
+        {
+            let handed = getLeftOrRightHanded().toLowerCase();
+            return KEYBOARD_DEFAULTS[chosen_keyboard][handed + '_key'];
+        }
+
+        function getIncorrectKey()
+        {
+            let handed = getLeftOrRightHanded().toLowerCase();
+            // If left handed, use right. Otherwise, use left.
+            let incorrect_key = (handed == 'left' ? 'right' : 'left') + '_key';
+            return KEYBOARD_DEFAULTS[chosen_keyboard][incorrect_key];
+        }
+
+        //simple version, single digit input, not a list
+        function upperCaseFromASCII(keycode)
+        {
+            character = String.fromCharCode(keycode);
+            return character.toUpperCase();
+        }
+
+        // data one would like to add to __all__ trials, according to:
+        // https://www.jspsych.org/overview/data/
+        let subject_id = jsPsych.randomization.randomID(8);
+        let group_name = stimuli.group_name;
+
+        jsPsych.data.addProperties({
+            subject: subject_id,
+            group: group_name,
+        });
+
+        // screens/(sub-)(trial-)phases...////////////////////////////////////////////////////
+
+
+        let start_screen = {
+            type: 'html-button-response',
+            stimulus: function(){
+                return "<div class='instruction' >" +
+                       "<p>" + GENERIC_CHECK + "</p></div>";
+            },
+            choices: [OK_BUTTON_TEXT],
+            response_ends_trial: true
+        };
+
+
+        let survey_multi_html_block = {
+            type: 'survey-html-form',
+            preamble: '<h5>' + PREPARE_FOR_SURVEY + '</h5><BR><BR>',
+            html: `
+                <div class="survey" >
+                
+                <label for="birth_year">In what year were you born? </label>
+                <input type="number" id="birth_year" 
+                name="birth_year" placeholder=1999 min=1919 max=2019 required>
+                <span class="validity"></span><BR>
+                
+                <label for="birth_month">In what month were you born? </label>
+                <input type="number" id="birth_month" name="birth_month" 
+                placeholder=7 min=1 max=12 required>
+                <span class="validity"></span><BR>
+                
+                <label for="native_language">What is your native language?</label>
+                <input type="text" id="native_language" name="native_language"
+                pattern="[a-zA-Z]+" placeholder="Dutch" required>
+                <span class="validity"></span><BR> 
+                
+                </div>
+                `,
+            on_finish: function(data){
+                var survey_html_responses = data.responses;
+                data.survey_html_responses = survey_html_responses;
+            }
+        };
+
+        // The multi-choice survey plugin has built-in validation.
+        let survey_multi_choice_block = {
+            type: 'survey-multi-choice',
+            data: {
+                useful_data_flag: false,
+                survey_data_flag: true
+            },
+            questions: [
+                {
+                    prompt: BILINGUAL_QUESTION,
+                    name: 'Multilingual',
+                    options: BILINGUAL_OPTIONS,
+                    required:true,
+                    horizontal: true
+                },
+                {
+                    prompt: DYSLEXIC_QUESTION,
+                    name: 'Dyslexic',
+                    options: DYSLEXIC_OPTIONS,
+                    required: true,
+                    horizontal: true
+                },
+                {
+                    prompt: SEX_QUESTION,
+                    name:'Sex',
+                    options: SEX_OPTIONS,
+                    required: true,
+                    horizontal: true
+                },
+                {
+                    prompt: HAND_QUESTION,
+                    name:'HandPreference',
+                    options: HAND_OPTIONS,
+                    required: true,
+                    horizontal: true
+                }
+            ],
+            on_finish: function(data){
+                //from here
+                let survey_multi_choice = data.responses;   
+                //setting old data from here
+                data.survey_multi_choice_responses = survey_multi_choice;
+            }
+        };
+
+        let survey_review_survey_data = {
+            type: "html-button-response",
+            stimulus: function(data){
+
+                let survey_html = 
+                    jsPsych.data.get().last(2).values()[0].survey_html_responses; //former
+                
+                let survey_multi = 
+                    jsPsych.data.get().last(1).values()[0].survey_multi_choice_responses;
+                
+                let jsHTML = JSON.parse(survey_html);
+                let b_year = jsHTML.birth_year;
+                let b_month = jsHTML.birth_month;
+                let n_lang = jsHTML.native_language;
+
+                let jsMulti = JSON.parse(survey_multi);
+                let bilingual = jsMulti.Multilingual;
+                let dyslexic = jsMulti.Dyslexic;
+                let sex = jsMulti.Sex;
+                let hand_pref = jsMulti.HandPreference;
+
+                return `
+                    <h1>Your data</h1>
+
+                    <div><strong>Birth year</strong>: ${b_year} </div>
+                    <div><strong>Birth month</strong>: ${b_month} </div>
+                    <div><strong>Native language</strong>: ${n_lang} </div>
+                    <div><strong>Multilingual</strong>: ${bilingual} </div>
+                    <div><strong>Dyslexic</strong>: ${dyslexic} </div>
+                    <div><strong>Sex</strong>: ${sex} </div>
+                    <div><strong>Hand preference</strong>: ${hand_pref} </div>
+
+                    <BR><BR>
+                    <p>Is this information correct?</p>
+                    `;
+            },
+            choices: YES_OR_NO_BUTTON_TEXT,
+            response_ends_trial: true,
+            on_finish: function(data){
+                // Repeat the survey if yes (0) was not pressed
+                repeat_survey = data.button_pressed != 0;
+            }
+        };
+
+        let select_keyboard_layout = {
+            type: 'html-button-response',
+            stimulus: '<h2>Choose the keyboard layout that looks most like yours</h2>',
+            choices: KEYBOARD_CHOICES,
+            prompt: `
+                Focus on the first 6 <strong>letters</strong> in the top left of your
+                keyboard layout if you're unsure.
+                `,
+            button_html: `
+                <button class="img-btn">
+                <img src=./images/%choice%.png></button>
+                `,
+            on_finish: function(data) {
+                let button_id = data.button_pressed;
+                let button_number = parseInt(button_id, 10);
+                let keyboard_chosen = KEYBOARD_CHOICES[button_number];
+                data.keyboard = keyboard_chosen;
+                chosen_keyboard = keyboard_chosen;//setting global value
+            }
+        };
+
+        //////////// left key setting & validation /////////////////////////
+
+        let test_keyboard_key_left = {
+            type: 'html-keyboard-response',
+            stimulus: function(){
+                return "<class='stimulus'>" +
+                       "<p>Press the <kbd>" +
+                        KEYBOARD_DEFAULTS[chosen_keyboard]['left_key'] +
+                       "</kbd> key on your keyboard.</p>";
+            },
+            choices: jsPsych.ALL_KEYS,
+            response_ends_trial: true,
+            stimulus_duration: 10000,
+            trial_duration: 10000,
+            prompt: "Please respond within 10 seconds.",
+            data: {
+                trial_phase: 'test_keyboard_key_left'
+            },
+            loop_function: function(data){
+                return repeat_validate_left_key;
+            },
+            on_finish: function(data) {
+                let expected_key_press = 
+                    jsPsych.pluginAPI.convertKeyCharacterToKeyCode(
+                    KEYBOARD_DEFAULTS[chosen_keyboard]['left_key']
+                    );
+                let key_chosen_ascii = data.key_press;
+                let key_chosen_char = 
+                    upperCaseFromASCII(key_chosen_ascii); //blanks for other than 0-9 & A-Z
+                data.key_confirmed = data.key_press == expected_key_press;
+                data.key_chosen_ascii = key_chosen_ascii;
+                data.key_chosen_char = key_chosen_char;
+
+                // We use === instead of a straight assignment to ensure we
+                // don't get undefined as a value
+                left_key_confirmed = data.key_confirmed === true;
+            }
+        };
+
+        let if_validated_key_left_feedback_needed = {
+            type: 'html-button-response',
+            stimulus: function() {
+                let wanted_key = KEYBOARD_DEFAULTS[chosen_keyboard]['left_key'];
+                let chosen_key = jsPsych.data.getLastTrialData().values()[0].key_chosen_char;
+                return "<p> You were asked to press: " + wanted_key + "<BR><BR>" + 
+                       "You pressed: " + chosen_key +
+                       "<BR><BR>Try again, please...</p>";
+            },
+            choices: [OK_BUTTON_TEXT]
+        };
+
+        let if_key_left_node = {
+            timeline: [if_validated_key_left_feedback_needed],
+            conditional_function: function(){
+                if (left_key_confirmed === true){
+                    repeat_validate_left_key = false;
+                    return false;
+                } else {
+                    repeat_validate_left_key = true;
+                    return true;
+                }
+            }
+        };
+
+        //////////// right key setting & validation /////////////////////////
+
+        let test_keyboard_key_right = {
+            type: 'html-keyboard-response',
+            stimulus: function(){
+                return "<class='stimulus' >" +
+                       "<p>Press the <kbd>" +
+                        KEYBOARD_DEFAULTS[chosen_keyboard]['right_key'] +
+                       "</kbd> key on your keyboard.</p>";
+            },
+            choices: jsPsych.ALL_KEYS,
+            response_ends_trial: true,
+            stimulus_duration: 10000,
+            trial_duration: 10000,
+            prompt: "Please respond within 10 seconds",
+            data: {
+                trial_phase: 'test_keyboard_key_right'
+            },
+            on_finish: function(data) {
+                let expected_key_press = 
+                    jsPsych.pluginAPI.convertKeyCharacterToKeyCode(
+                    KEYBOARD_DEFAULTS[chosen_keyboard]['right_key']
+                    );
+                let key_chosen_ascii = data.key_press;
+                let key_chosen_char = upperCaseFromASCII(key_chosen_ascii);
+                data.key_confirmed = data.key_press == expected_key_press;
+                data.key_chosen_ascii = key_chosen_ascii;
+                data.key_chosen_char = key_chosen_char;
+
+                // We use === instead of a straight assignment to ensure we
+                // don't get undefined as a value
+                right_key_confirmed = data.key_confirmed === true;
+            }
+        };
+
+        let if_validated_key_right_feedback_needed = {
+            type: 'html-button-response',
+            stimulus: function() {
+                let wanted_key = KEYBOARD_DEFAULTS[chosen_keyboard]['right_key'];
+                let chosen_key = 
+                    jsPsych.data.getLastTrialData().values()[0].key_chosen_char;
+                return "<p> You were asked to press: " + wanted_key + "<BR><BR>" + 
+                       "You pressed: " + chosen_key +
+                       "<BR><BR>Try again, please...</p>";
+            },
+            choices: [OK_BUTTON_TEXT]
+        };
+
+        let if_key_right_node = {
+            timeline: [if_validated_key_right_feedback_needed],
+            conditional_function: function(){
+                if (right_key_confirmed == true){
+                    repeat_validate_right_key = false;
+                    return false;
+                } else {
+                    repeat_validate_right_key = true;
+                    return true;
+                }
+            }
+        };
+
+        let instruction_screen_practice = {
+            type: 'html-button-response',
+            stimulus: function(){
+                let text = PRE_PRACTICE_INSTRUCTION;
+                text = text.replace('%correct_key%', getCorrectKey());
+                text = text.replace('%incorrect_key%', getIncorrectKey());
+                return "<div class='instruction' >" +
+                       "<p>" + text + "</p></div>";
+            },
+            choices: [OK_BUTTON_TEXT],
+            response_ends_trial: true,
+        };
+
+        let well_done_screen = {
+            type: 'html-button-response',
+            stimulus: function(){
+                return "<div class='instruction' >" +
+                    '<p>' + PRE_TEST_INSTRUCTION + '</p></div>';
+            },
+            choices: [OK_BUTTON_TEXT],
+            response_ends_trial: true,
+            data: { useful_data_flag: false }
+        };
+
+        let end_screen = {
+            type: 'html-button-response',
+            stimulus: DEBRIEF_MESSAGE,
+            choices: [],
+            trial_duration: DEBRIEF_MESSAGE_DURATION
+        };
+
+        let present_fixation = {
+            type: 'html-keyboard-response',
+            stimulus: '<span style="font-size:40px;">+</span>',
+            choices: jsPsych.NO_KEYS,
+            trial_duration: FIXCROSS_DURATION
+        };
+
+        var present_prime_mask = {
+            type: 'html-keyboard-response',
+            stimulus: function(){ 
+                return "<p class='stimulus'>" + jsPsych.timelineVariable('pmask', true) + "</p>";
+            },
+            choices: jsPsych.NO_KEYS,
+            trial_duration: PRIME_MASK_DURATION,
+            post_trial_gap: 0,
+            prompt: "",
+            data: { useful_data_flag: false }
+        };
+
+
+        let present_prime = {
+            type: 'html-keyboard-response',
+            stimulus: function(){
+                return "<p class='stimulus'>" + 
+                       jsPsych.timelineVariable('prime', true) + "</p>";
+            },
+            choices: jsPsych.NO_KEYS,
+            trial_duration: PRIME_DURATION,
+            post_trial_gap: PRIME_GAP_DURATION
+        };
+
+        // So this is a hack (or a clever use of Duck Typing)
+        // We don't actually know the right keys when defining present_word,
+        // but we need to give an array of choices anyway. This object mimics
+        // an array just enough to fool JSPsych into accepting it.
+        // It works by defining the 0 and 1 'indexes' as getter functions. As
+        // JSPsych only uses the array when we already know the keys, the
+        // values are only computed once we know them.
+        let present_word_choices = {
+            _0: undefined,
+            _1: undefined,
+            get 0() {
+                // This is a caching strategy, to ensure we only have to do
+                // expensive stuff once
+                if (typeof this._0 === 'undefined')
+                    this._0 = getCorrectKey();
+
+                return this._0;
+            },
+            get 1() {
+                // This is a caching strategy, to ensure we only have to do
+                // expensive stuff once
+                if (typeof this._1 === 'undefined')
+                    this._1 = getIncorrectKey();
+
+                return this._1;
+            },
+            length: 2,
+        };
+
+
+
+        let present_word = {
+            type: 'audio-keyboard-response',
+            stimulus: jsPsych.timelineVariable('wordfn'), //this may nee inline func
+            choices: present_word_choices,
+            prompt: "",
+            trial_ends_after_audio: false,
+            trial_duration: RESPONSE_TIMEOUT_DURATION,
+            response_ends_trial: true,
+            data: {
+                condition: jsPsych.timelineVariable('item_type'),
+                word: jsPsych.timelineVariable('word'),
+                word_file: jsPsych.timelineVariable('wordfn'),
+                prime: jsPsych.timelineVariable('prime'),
+                prime_mask: jsPsych.timelineVariable('pmask'),
+                id: jsPsych.timelineVariable('id'),
+                trial_phase: 'present_word',
+                useful_data_flag: true,
+            },
+            on_finish: function(data){
+                let correct_key = getCorrectKey()
+                let incorrect_key = getIncorrectKey();
+                let correct;
+
+                // Alias this function for readability
+                let convertToKeyCode = jsPsych.pluginAPI.convertKeyCharacterToKeyCode
+
+                switch (data.condition)
+                {
+                    case 'RELATED':
+                    case 'UNRELATED':
+                        correct = data.key_press == convertToKeyCode(correct_key);
+                        break;
+                    // it's a non-word if the above is untrue, so we must have incorrect
+                    default:
+                        correct = data.key_press == convertToKeyCode(incorrect_key);
+                        break;
+                }
+
+                data.correct = correct;
+            }
+        };
+
+        let present_feedback = {
+            type: 'html-keyboard-response',
+            stimulus: function() {
+                let feedback_text = '<span style="color:red;font-size:30px;">Incorrect</span>';
+                let last_resp_acc = jsPsych.data.getLastTrialData().values()[0].correct;
+                if (last_resp_acc == true) {
+                    feedback_text = '<span style="color:green;font-size:30px;">Correct!</span>';
+                }
+                return feedback_text;
+            },
+            choices: jsPsych.NO_KEYS,
+            trial_duration: FEEDBACK_DURATION
+        };
+
+        // audio testing ///////////////////////////////////////////////////
+
+        let test_audio_looped = {
+            timeline:
+                [
+                    {
+                        type: 'audio-button-response',
+                        stimulus: './sounds/beep.mp3',
+                        choices: ['Play Again', 'Continue'],
+                        prompt: function(){
+                            return "<div class='instruction' >" +
+                                '<p>' + AUDIO_CHECK_PROMPT_TEXT_LOOP + '</p></div>'
+                        }
+                    }
+                ],
+            loop_function: function(data){
+                if (data.values()[0].button_pressed == 0){
+                    return true; // loop again!
+                } else {
+                    return false; // continue
+                }
+            },
+            on_finish: function(data) {
+                data.audio_checked = true;
+            }
+        };
+
+
+        // (timeline) procedures //////////////////////////////////////////////////////////
+
+        let survey_procedure = {
+            timeline: [
+                survey_multi_html_block,
+                survey_multi_choice_block,
+                survey_review_survey_data,
+            ],
+            loop_function: function(){
+                if (repeat_survey == true){
+                    // Remove any previously recorded data, to prevent
+                    // duplicate entries
+                    jsPsych.data.reset();
+
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        };
+
+        let keyboard_set_key_left_procedure = {
+            timeline:[
+                test_keyboard_key_left,
+                if_key_left_node,
+            ],
+            loop_function: function(){
+                return repeat_validate_left_key === true;
+            }
+        }; 
+
+        let keyboard_set_key_right_procedure = {
+            timeline:[
+                test_keyboard_key_right,
+                if_key_right_node,
+            ],
+            loop_function: function(){
+                return repeat_validate_right_key === true;
+            }
+        }; 
+
+        let practice_procedure = {
+            timeline:[
+                present_fixation,
+                present_prime_mask,
+                present_prime,
+                present_word,
+                present_feedback
+            ],
+            timeline_variables: getPracticeItems().table,
+            randomize_order: false,
+        };
+
+        let trial_procedure_pseudorandom = {
+            timeline:[
+                present_fixation,
+                present_prime_mask,
+                present_prime,
+                present_word,
+            ],
+            timeline_variables: uil.randomization.randomizeStimuli(
+                stimuli.table,
+                MAX_SUCCEEDING_ITEMS_OF_TYPE,
+                'item_type',
+            ),
+            randomize_order: false // this should be false if uil randomization is used...
+        };
+
+        let trial_procedure_random = {
+            timeline:[
+                present_fixation,
+                present_prime_mask,
+                present_prime,
+                present_word
+            ],
+            timeline_variables: stimuli.table,
+            randomize_order: true // this should be true if you want jsPsych's randomization
+        };
+
+        //////////////// timeline /////////////////////////////////
+
+        let timeline = [];
+
+        // it's best practice to have *mouse click* user I/O first
+        timeline.push(start_screen);
+        
+        // survey
+        timeline.push(survey_procedure);
+        
+        // kb layout
+        timeline.push(select_keyboard_layout);
+        
+        // kb important keys
+        timeline.push(keyboard_set_key_left_procedure);
+        timeline.push(keyboard_set_key_right_procedure);
+
+        timeline.push(test_audio_looped);
+        
+        // task instruction
+        timeline.push(instruction_screen_practice);
+        
+        timeline.push(practice_procedure);
+
+        timeline.push(well_done_screen);
+
+        // NOTE options below! comment/uncomment for regular vs restrained randomization
+        // true randomness is better for the current template's amount of items...
+
+        timeline.push(trial_procedure_pseudorandom); // don't do this with little stimuli
+        //timeline.push(trial_procedure_random);
+        
+        timeline.push(end_screen);
+
+        // Start jsPsych when running on a Desktop or Laptop style pc.
+        if (! uil.isMobileOrTablet()) {
+            jsPsych.init({
+                timeline: timeline,
+                preload_audio: [
+                    practice_audio,
+                    test_audio
+                    ],
+                exclusions: {
+                    min_width: MIN_WIDTH,
+                    min_height: MIN_HEIGHT
+                },
+                show_progress_bar: false,
+                use_webaudio: false,
+                on_finish: function() {
+                    // the 'true' parameter is needed only for the acc. server
+                    uil.saveData(ACCESS_KEY, true);
+                }
+            });
+        }
+        else { // or bail out.
+            let paragraph = document.createElement("p")
+            paragraph.innerHTML = "Please run this experiment on a pc or laptop.";
+            document.body.appendChild(paragraph);
+        }
+    })
+    </script>
+</html>
+
