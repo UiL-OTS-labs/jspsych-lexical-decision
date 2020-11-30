@@ -6,12 +6,12 @@
  */
 
 const PRE_PRACTICE_INSTRUCTION =
-    "<strong>Dear participant,</string><BR><BR>"        +
+    "<strong>Dear participant,</strong><BR><BR>"        +
     "Thank you for participating in this experiment."   +
     "<BR><BR>"                                          +
     "You are now going to see and hear words, one "     +
     "after the other. The words come in pairs, first "  +
-    "visual, then audio. Words may look a bit weird (todo todo)"    +
+    "visual, then audio. Words may look a bit weird (todo todo)"+
     "Your task is to indicate for each pair as "        +
     "quickly as possible whether you think "            +
     "<i>both words are real words or not</i>."          +

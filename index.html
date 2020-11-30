@@ -87,7 +87,7 @@
     <body></body>
     <script>
     
-    // Wait till the browser has loaded all files, then execute the
+    // Wait until the browser has loaded all files, then execute the
     // contents of this method
     
     window.addEventListener('load', function() {
@@ -107,12 +107,10 @@
         
         var chosen_keyboard = undefined;
 
-        // first, i'll put the preloaders here, but maybe it's better in stimuli.js?
+        ////////////////////////// media preloading ///////////////////////////////////////
         
         var beep_audio = ['./sounds/beep.mp3'];
         
-        ////////////////////////// media preloading ///////////////////////////////////////
-
         // create list of all audio files for preloading
         var practice_audio = []; //here we want (path) audio files
         let practice_items = getPracticeItems().table; //let's just have them 'again'
@@ -173,7 +171,6 @@
 
         // screens/(sub-)(trial-)phases...////////////////////////////////////////////////////
 
-
         let start_screen = {
             type: 'html-button-response',
             stimulus: function(){
@@ -183,7 +180,6 @@
             choices: [OK_BUTTON_TEXT],
             response_ends_trial: true
         };
-
 
         let survey_multi_html_block = {
             type: 'survey-html-form',

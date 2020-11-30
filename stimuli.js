@@ -24,7 +24,7 @@ const PRACTICE_ITEMS = [
         word: "hot", 
         wordfn: "./sounds/hot.wav",
         prime: "stapler",
-        pmask: "######"
+        pmask: "#######"
     }
 ];
 
