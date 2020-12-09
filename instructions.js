@@ -11,18 +11,39 @@ const PRE_PRACTICE_INSTRUCTION =
     "<BR><BR>"                                          +
     "You are now going to see and hear words, one "     +
     "after the other. The words come in pairs, first "  +
-    "visual, then audio. Words may look a bit weird (todo todo)"+
-    "Your task is to indicate for each pair as "        +
+    "visual, then auditory. Pay attention to "          + 
+    "the visual word <i>and</i> the word you "         +
+    "<i>hear</i> on your headphones.<BR><BR>"           +
+
+    "Your task is to indicate as "                      +
     "quickly as possible whether you think "            +
-    "<i>both words are real words or not</i>."          +
-    " Try to make no mistakes.<BR><BR>"                 +
-    "To respond, hit the <kbd>%correct_key%</kbd> "     +
-    "key for <i>Yes</i> and the "                       +
-    "<kbd>%incorrect_key%</kbd> key for <i>No</i>"      +
-    "<BR><BR>First, you can practice.<BR><BR>"          +
-    "<i>Click OK to start practicing</i>"
+    "<i>both words are real words or not</i>. "         +
+    "Try to make no mistakes.<BR><BR>"                  +
+
+    "After clicking OK, please put your "               +
+    "<i>index</i> fingers on the two "                  + 
+    "keys you've just set. Try keep them in those "     +
+    "positions during the <i>entire experiment</i>!<BR>"+
+
+    "<ul>"                                              + 
+    "<li>Hit the <kbd>%correct_key%</kbd> key for "     + 
+    "<strong>Yes</strong>. "                            + 
+    "<sub><i>(Use this 'Yes' key to proceed throughout "+ 
+    "the experiment)</i>.</sub></li>"                   +
+    "<li>Hit the <kbd>%incorrect_key%</kbd> key for "   +
+    "<strong>No</strong>.</li>"                         + 
+    "</ul>"                                             +
+
+    "First, you can practice.<BR><BR>"                  +
+    "<i>Click OK to start practicing.</i>"
     ;
 
+const PREPARE_YES_KEY_PROMPT = `
+    <strong>Get your index fingers in position!</strong>
+    <BR><BR>
+    Hit your <kbd>%correct_key%</kbd> key (<i>'yes'</i>) 
+    to start. 
+    `;
 
 const PRE_TEST_INSTRUCTION = 
     "End of the practice part.<BR><BR>"                 +
