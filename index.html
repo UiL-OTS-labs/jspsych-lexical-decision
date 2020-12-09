@@ -458,6 +458,23 @@
             response_ends_trial: true,
         };
 
+        let participant_keyboard_control_start = {
+            type: 'html-keyboard-response',
+            stimulus: function(){
+                let text = PREPARE_YES_KEY_PROMPT;
+                text = text.replace('%correct_key%', getCorrectKey())
+                return "<div class='instruction' >" +
+                       "<p>" + text + "</p></div>";
+            },
+            choices: function(){
+                let choice = getCorrectKey();
+                return [choice];
+            },
+            //trial_duration: 10000,
+            trial_ends_after_response: true,
+            post_trial_gap: 300,
+        };
+
         let well_done_screen = {
             type: 'html-button-response',
             stimulus: function(){
@@ -494,7 +511,6 @@
             prompt: "",
             data: { useful_data_flag: false }
         };
-
 
         let present_prime = {
             type: 'html-keyboard-response',
@@ -718,19 +734,26 @@
         timeline.push(keyboard_set_key_left_procedure);
         timeline.push(keyboard_set_key_right_procedure);
 
+        // audio test flow
         timeline.push(test_audio_looped);
-        
-        // task instruction
+
+        // task instruction (with button)
         timeline.push(instruction_screen_practice);
+
+        // a keyboard dominant hand configured key continue/prepare flow
+        timeline.push(participant_keyboard_control_start);
         
         timeline.push(practice_procedure);
 
         timeline.push(well_done_screen);
 
+        // and a new 'prepare for action' flow
+        timeline.push(participant_keyboard_control_start);
+
         // NOTE options below! comment/uncomment for regular vs restrained randomization
         // true randomness is better for the current template's amount of items...
 
-        timeline.push(trial_procedure_pseudorandom); // don't do this with little stimuli
+        timeline.push(trial_procedure_pseudorandom); // don't do this with little stimuli?
         //timeline.push(trial_procedure_random);
         
         timeline.push(end_screen);
