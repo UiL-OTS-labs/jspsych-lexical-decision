@@ -59,16 +59,19 @@ const PRE_PRACTICE_INSTRUCTION =
     "<i>both words are existing words or not</i>. "     +
     "Try to make no mistakes.<BR><BR>"                  +
 
-    "After clicking OK, please put your dominant "      +
-    "<i>index</i> finger on the "                       + 
-    "<kbd>%correct_key%</kbd> key "                     + 
-    "to respond <strong>Yes</strong>, and to proceed "  + 
-    "through the experiment. Put your other index "     + 
-    "finger on the <kbd>%incorrect_key%</kbd> key "     +
-    "to respond <strong>No</strong>. "                  +
-    "Try to keep your fingers on those keys "           +
-    "during the <i>entire experiment</i>!<BR>"          +
+    "After clicking OK, please put your "               +
+    "<i>index</i> fingers on the two "                  + 
+    "keys you've just set. Try keep them in those "     +
+    "positions during the <i>entire experiment</i>!<BR>"+
 
+    "<ul>"                                              + 
+    "<li>Hit the <kbd>%correct_key%</kbd> key for "     + 
+    "<strong>Yes</strong>. "                            + 
+    "<sub><i>(Use this 'Yes' key to proceed throughout "+ 
+    "the experiment)</i>.</sub></li>"                   +
+    "<li>Hit the <kbd>%incorrect_key%</kbd> key for "   +
+    "<strong>No</strong>.</li>"                         + 
+    "</ul>"                                             +
     "First, you can practice.<BR><BR>"                  +
     "<i>Click OK to start practicing.</i>"
 ;
