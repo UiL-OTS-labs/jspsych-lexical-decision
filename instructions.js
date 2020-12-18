@@ -5,25 +5,29 @@
  * utf8 text encoding.
  */
 
+
 const PRE_PRACTICE_INSTRUCTION =
     "<strong>Dear participant,</strong><BR><BR>"        +
+    
     "Thank you for participating in this experiment."   +
     "<BR><BR>"                                          +
+    
     "You are now going to see and hear words, one "     +
     "after the other. The words come in pairs, first "  +
-    "visual, then auditory. Pay attention to "          + 
-    "the visual word <i>and</i> the word you "         +
-    "<i>hear</i> on your headphones.<BR><BR>"           +
+    "a written word, then a spoken word. Pay attention "+
+    "to both the written word <i>and</i> the word you " +
+    "<i>hear</i>.<BR><BR>"                              +
 
     "Your task is to indicate as "                      +
     "quickly as possible whether you think "            +
-    "<i>both words are real words or not</i>. "         +
+    "<i>both words are existing words or not</i>. "     +
     "Try to make no mistakes.<BR><BR>"                  +
-
-    "After clicking OK, please put your "               +
-    "<i>index</i> fingers on the two "                  + 
-    "keys you've just set. Try keep them in those "     +
-    "positions during the <i>entire experiment</i>!<BR>"+
+    
+    "After clicking OK, please put your <i>index</i> "  +
+    "fingers on the <kbd>%correct_key%</kbd> key "      +
+    "and the <kbd>%incorrect_key%</kbd> key. "          +
+    "Try to keep them there during the "                +
+    "<i>entire experiment</i>!<BR>"                     +
 
     "<ul>"                                              + 
     "<li>Hit the <kbd>%correct_key%</kbd> key for "     + 
@@ -35,6 +39,7 @@ const PRE_PRACTICE_INSTRUCTION =
     "</ul>"                                             +
 
     "First, you can practice.<BR><BR>"                  +
+    
     "<i>Click OK to start practicing.</i>"
     ;
 
@@ -45,9 +50,10 @@ const PREPARE_YES_KEY_PROMPT = `
     to start. 
     `;
 
+
 const PRE_TEST_INSTRUCTION = 
     "End of the practice part.<BR><BR>"                 +
     "If you have any questions at this moment, please " +
-    " ask yourself now.<BR><BR>"                        +
+    "ask yourself now.<BR><BR>"                         +
     "If not, click OK to continue with the real task."
     ;
