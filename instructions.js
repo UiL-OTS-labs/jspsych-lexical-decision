@@ -23,11 +23,10 @@ const PRE_PRACTICE_INSTRUCTION =
     "<i>both words are existing words or not</i>. "     +
     "Try to make no mistakes.<BR><BR>"                  +
     
-    "After clicking OK, please put your <i>index</i> "  +
-    "fingers on the <kbd>%correct_key%</kbd> key "      +
-    "and the <kbd>%incorrect_key%</kbd> key. "          +
-    "Try to keep them there during the "                +
-    "<i>entire experiment</i>!<BR>"                     +
+    "After clicking OK, please put your "               +
+    "<i>index</i> fingers on the two "                  + 
+    "keys you've just set. Try keep them in those "     +
+    "positions during the <i>entire experiment</i>!<BR>"+
 
     "<ul>"                                              + 
     "<li>Hit the <kbd>%correct_key%</kbd> key for "     + 
@@ -39,7 +38,6 @@ const PRE_PRACTICE_INSTRUCTION =
     "</ul>"                                             +
 
     "First, you can practice.<BR><BR>"                  +
-    
     "<i>Click OK to start practicing.</i>"
     ;
 
