@@ -60,6 +60,7 @@ The following code block, 'present_word' (exerpt from 'index.html' contents) yie
             data: {
                 condition: jsPsych.timelineVariable('item_type'),
                 word: jsPsych.timelineVariable('word'),
+                word_file: jsPsych.timelineVariable('wordfn'),
                 prime: jsPsych.timelineVariable('prime'),
                 mask: jsPsych.timelineVariable('pmask'),
                 id: jsPsych.timelineVariable('id'),
@@ -69,36 +70,35 @@ The following code block, 'present_word' (exerpt from 'index.html' contents) yie
             },
             //...(left out for brevity)
    ```
-In the `data: { ` section of the above code, you see some `'key: value'` pairs. They implement the stimulus definitions (`stimuli.js`) to the presentation phase (in `index.html`) and connect relevant data needed in that trial phase. These can then also be used in context and added in the output. In this case,`'condition', 'word', 'prime', 'id'` and `'correct_response'` reference 'timelineVariable' information from `stimuli.js`, whereas `'trial_phase'` and `'useful_data_flag'` are added there 'directly'. 
+In the `data: { ` section of the above code, you see some `'key: value'` pairs. They implement the stimulus definitions (`stimuli.js`) to the presentation phase (in `index.html`) and connect relevant data needed in that trial phase. These can then also be used in context and added in the output. In this case,`'condition', 'word', 'prime', 'id', 'pmask', 'wordfn'` and `'correct_response'` reference 'timelineVariable' information from `stimuli.js`, whereas `'trial_phase'` and `'useful_data_flag'` are added there 'directly'. 
 
 The 'useful_data_flag' was added so it could be used for filtering the aggregate of output from your online experiment. You can alter or add data (key, value pairs) according to your own goals and needs, but you would need to edit the present_block, be careful and concise!
 
 The 'raw' ([JSON](https://www.json.org/json-en.html)) output data of a `'present_word'` 'trial' (our 'trial' is in fact a _sub trial phase_) may look like this:
 
 ```JSON
-    {
-        "rt": 368.0000000000073,
-        "stimulus": "<p class='stimulus'>crawse</p>",
-        "key_press": 76,
-        "condition": "NON_WORD",
-        "word": "crawse",
-        "prime": "piano",
-        "id": 2,
-        "trial_phase": "present_word",
-        "useful_data_flag": true,
-        "correct_response": 0,
-        "trial_type": "html-keyboard-response",
-        "trial_index": 25,
-        "time_elapsed": 44933,
-        "internal_node_id": "0.0-11.0-2.1",
-        "subject": "f9pdgg60",
-        "list": "my_one_and_only_list",
-        "correct": true,
-        "key_chosen_ascii": 76,
-        "key_chosen_char": "L",
-        "yes_key": "A",
-        "no_key": "L"
-    },
+     {
+    		"rt": null,
+		"stimulus": "./sounds/crawse.wav",
+		"key_press": null,
+		"condition": "NON_WORD",
+		"word": "crawse",
+		"word_file": "./sounds/crawse.wav",
+		"prime": "piano",
+		"prime_mask": "#####",
+		"id": 2,
+		"trial_phase": "present_word",
+		"useful_data_flag": true,
+		"trial_type": "audio-keyboard-response",
+		"trial_index": 53,
+		"time_elapsed": 69299,
+		"internal_node_id": "0.0-11.0-3.7",
+		"subject": "pynrlguo",
+		"group": "group1",
+		"key_chosen_ascii": null,
+		"key_chosen_char": "\u0000",
+		"correct": false
+	},
  ...
  ```
 Clearly, it contains a lot more `key: value` pairs than what was mentioned above in the experpt `present_word` trial from `index.html`. 
@@ -114,8 +114,8 @@ Here is a description of the above example, using "#" as comments on the `"key: 
 ```JSON
                                                #this is a comment
 
-"rt": 368.0000000000073,
-"stimulus": "<p class='stimulus'>crawse</p>",  # Reaction Time, in miliseconds (jsPysch default)
+"rt": 368.0000000000073,                       # Reaction Time, in miliseconds (jsPysch default)
+"stimulus": "./sounds/crawse.wav",             # jsPsych default: what is the stimulus.
 "key_press": 76,                               # The word or string and/or its HTML specifics (jsPsych default)
 "condition": "NON_WORD",                       # ASCII code of keyboard key pressed within phase (jsPysch default)
 "word": "crawse",                              # timelineVariable from 'stimuli.js' (UiL template default)
@@ -151,69 +151,77 @@ The easiest way to test a template _as is_:
 
 ### Adapting stimuli
 - Open the file `stimuli.js` in your plain text editor.
-- Note, there is a list, called LIST_1:
+- Note, there is a list, called LIST_1, it could look like this (or slightly different, due to new design considerations):
 
 ```const LIST_1 = [
     {
-        id: 1,
-        item_type: NON_WORD,
-        word: "SLIRQUE",
+        id: 1, 
+        item_type: NON_WORD, 
+        word: "slirque", 
+        wordfn: "./sounds/slirque.wav",
         prime: "eyes",
         pmask: "####"
     },
     {
-        id: 2,
-        item_type: NON_WORD,
-        word: "CRAWSE",
+        id: 2, 
+        item_type: NON_WORD, 
+        word: "crawse", 
+        wordfn: "./sounds/crawse.wav",
         prime: "piano",
         pmask: "#####"
     },
     {
-        id: 3,
-        item_type: NON_WORD,
-        word: "THWURP",
+        id: 3, 
+        item_type: NON_WORD, 
+        word: "thwurp", 
+        wordfn: "./sounds/thwurp.wav",
         prime: "rabbit",
         pmask: "######"
     },
     {
-        id: 4,
-        item_type: NON_WORD,
-        word: "CLEM",
+        id: 4, 
+        item_type: NON_WORD, 
+        word: "clem", 
+        wordfn: "./sounds/clem.wav",
         prime: "flower",
         pmask: "######"
-    },
+    }, 
     {
-        id: 5,
-        item_type: RELATED,
-        word: "WHITE",
+        id: 5, 
+        item_type: RELATED, 
+        word: "white", 
+        wordfn: "./sounds/white.wav",
         prime: "snow",
-        pmask: "####" 
+        pmask: "####"
     },
     {
-        id: 6,
-        item_type: RELATED,
-        word: "TRAVEL",
+        id: 6, 
+        item_type: RELATED, 
+        word: "travel", 
+        wordfn: "./sounds/travel.wav",
         prime: "suitcase",
         pmask: "########"
     },
     {
-        id: 7,
-        item_type: UNRELATED,
-        word: "LETTER",
+        id: 7, 
+        item_type: UNRELATED, 
+        word: "letter", 
+        wordfn: "./sounds/letter.wav",
         prime: "garden",
         pmask: "######"
     },
     {
-        id: 8,
-        item_type: UNRELATED,
-        word: "CLOWN",
+        id: 8, 
+        item_type: UNRELATED, 
+        word: "clown", 
+        wordfn: "./sounds/clown.wav",
         prime: "forest",
-        pmask: "######" 
+        pmask: "######"
     }
 ];
 
 ```
--  This list can be adapted to your own needs, i.e, you can replace values, make the list longer (don't forget to increment the 'id' values for new items!).
+- This list can be adapted to your own needs, i.e, you can replace values, make the list longer (don't forget to increment the 'id' values for new items!).
 - If you need to implement a more complex design, you should read the file and its comment sections a little better. 
 - For an example of a Latin square design, please have a look [here](https://github.com/UiL-OTS-labs/jspsych-spr-mw) for some inspiration. 
 
@@ -229,38 +237,4 @@ const ACCESS_KEY = 'zeekretkey';
 For uploading to the UiL-OTS data server you will need to change this to the access_key that you obtained when your experiment was approved. For elaborate info see `globals.js`.
 
 Good luck!
-
-# Getting started (the easy way, working internet connection required)
-For now, the easiest way to test these templates, is:
-
-1. Download this repository by clicking the green code button above and Download zip.
-2. Unzip the jspsych-audlexdec-vp-main.zip at a location of your choosing.
-3. Inside the folder is a file called index.html, double click it in order to open it
-   in a browser.
-
-# Getting started (the harder way, local and/or custom setup)
-
-You need this github repository and to download the jsPsych library version 6.1
-complete the following steps. When downloading and extracting folders please
-keep in mind that once working on the server, filenames are case sensitive and
-"jsPsych.js" and "jspsych.js" are two distinct filenames. It might work on your
-machine, but it might not work on the server hosting your experiment.
-
-You will need to adapt your own directory structure/naming convention in the 
-top ```<script>``` tags as defined in index.html, if you want your own local jsPsych setup.
-
-1. Download this repository by clicking the green code button above and Download zip.
-2. Unzip the jspsych-audlexdec-vp.zip at a location of your choosing.
-3. Download jsPsych-6.1.0 (-6.1.0 is the version) from the jsPsych releases website
-   https://github.com/jspsych/jsPsych/releases. You might need to scroll down a little.
-4. Extract the jsPsych folder into the jspsych-audlexdec-vp folder you extracted earlier.
-5. Inside the folder is a file called index.html, double click it in order to open it
-   in a browser.
-   
-
-
-
-
-
-  
 
