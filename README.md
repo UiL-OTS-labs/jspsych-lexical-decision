@@ -14,9 +14,9 @@ The participant first sees a fixation cross, then a (forward) _masked_ prime is 
 
 - The (forward) _mask_ is a string of characters of (preferably) the same amount of characters as the prime.
 - The _prime_ is a string of letters and can be a real word or a nonword.
-- The _'test stimulus'_ is a string of letters and can also be a real word or a nonword.
+- The _'test stimulus'_ is a reference to an audio file and can be a real word or a nonword.
 
-A reference that descibes this variant's method:
+A reference that descibes this variant's method (although this one works with audio files):
 
 Jacob, G., Heyer, V., & Veríssimo, J. (2018). Aiming at the same target: A masked priming study directly comparing derivation and inflection in the second language. International Journal of Bilingualism, 22(6), 619–637. https://doi.org/10.1177/1367006916688333
 
