@@ -7,8 +7,6 @@ const NON_WORD = "NON_WORD";
 const RELATED = "RELATED";
 const UNRELATED = "UNRELATED";
 const PRACTICE = "PRACTICE";
-
-// name for lists, in this case one list, one item in the list
 const LISTS = ["my_one_and_only_list"];
 
 // In case of more complex design, the above could be, for example:
@@ -114,7 +112,6 @@ const LIST_1 = [
     }
 ];
 
-
 // Add a second list of stimuli when required.
 // const LIST_2 = [
 // ...
@@ -122,30 +119,19 @@ const LIST_1 = [
 
 const TEST_ITEMS = [
     {list_name: LISTS[0], table: LIST_1}
-    // Add the second list here, put a comma on the end of the line above here.
-    //{group_name: LISTS[1], table: LIST_2}
 ];
 
-/**
- * Get the list of practice items
- *
- * Returns an object with a group and a table, the list will always indicate
- * "practice" since it are the practice items
- *
- * @returns {object} object with group and table fields
- */
+// If there were two lists to choose from:
+
+// const TEST_ITEMS = [
+//     {list_name: LISTS[0], table: LIST_1},
+//     {list_name: LISTS[1], table: LIST_2}
+// ];
+
 function getPracticeItems() {
     return {list_name : "practice", table : PRACTICE_ITEMS};
 }
 
-/**
- * This function will pick a random list from the TEST_ITEMS array.
- *
- * Returns an object with a list and a table, the list will always indicate
- * which list has been chosen for the participant.
- *
- * @returns {object} object with list and table fields
- */
 function pickRandomList() {
     let range = function (n) {
         let empty_array = [];

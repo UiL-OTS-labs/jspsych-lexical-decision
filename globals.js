@@ -1,3 +1,6 @@
+////////////////
+// GLOBALS
+///////////////
 
 // ACCESS_KEY needs to be used for server setup (data store)
 const ACCESS_KEY = 'zeeekretkeey'; 

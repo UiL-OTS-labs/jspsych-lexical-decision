@@ -21,6 +21,7 @@
     
     <!-- Generic jspsych style sheet -->
     <link href="https://web-experiments.lab.hum.uu.nl/jspsych/6.1.0/css/jspsych.css" rel="stylesheet" type="text/css"/>
+    
     <!-- UU fonts -->
     <link href=https://web-experiments.lab.hum.uu.nl/jspsych/uil-utils/0.0/fonts.css rel="stylesheet" type="text/css"/>
 
@@ -131,7 +132,6 @@
         for (var i=0; i< practice_items.length; i++) {
             practice_audio.push(practice_items[i].wordfn);
         };
-        console.log(practice_audio);
 
         // test audio list
         var test_audio = []; // the same...
@@ -140,7 +140,6 @@
         for (var i=0; i< test_items.length; i++) {
             test_audio.push(test_items[i].wordfn);
         };
-        console.log(test_audio);
 
         // experiment logic vars
         var handpref = undefined;
@@ -302,6 +301,7 @@
             trial_ends_after_audio: false,
             trial_duration: RESPONSE_TIMEOUT_DURATION,
             response_ends_trial: true,
+            post_trial_gap: DEFAULT_ITI,
             data: {
                 condition: jsPsych.timelineVariable('item_type'),
                 word: jsPsych.timelineVariable('word'),

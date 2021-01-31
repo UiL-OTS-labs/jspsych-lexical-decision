@@ -53,9 +53,7 @@ The crucial trial/sub-trial phase (decision phase) output may look similar to th
 For now, the easiest way to test these templates, is:
 
 1. Download this repository by clicking the green code button above and Download zip.
-2. Unzip the jspsych-audlexdec-main.zip at a location of your choosing.
+2. Unzip at a location of your choosing.
 3. Inside the folder is a file called index.html, double click it in order to open it
    in a browser.
-
-  
 
