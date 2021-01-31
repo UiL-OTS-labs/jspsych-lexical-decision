@@ -1,4 +1,4 @@
-# jspsych-audlexdec-vp
+# jspsych-audlexdec-vp-vm
 Auditory [Lexical Decision](https://en.wikipedia.org/wiki/Lexical_decision_task) Experiment with _Visual Masked Prime_ (template)
 
 # Generic documentation
