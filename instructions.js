@@ -5,10 +5,10 @@
  * utf8 text encoding.
  */
 
- // GENERIC TESTS/CHECKS
+// GENERIC TESTS/CHECKS
 const GENERIC_CHECK = `
     <h3>In order to participate, please make sure that you:</h3>
-    <BR>
+    <br>
     <ul>
     <li>Run this on a Laptop or Desktop computer, <b>not</b> on a phone or a tablet!</li>
     <li>Have a <b>real keyboard</b> working.</li><li>Have a <b>mouse</b> and/or 
@@ -16,7 +16,7 @@ const GENERIC_CHECK = `
     <li>Have your browser's audio enabled and your volume on.</li>
     </ul>
     <h3>Please <i>maximize</i> your browser window before you continue!</h3>
-    <BR>
+    <br>
     <p>Click below if you are ready to proceed</p>
     `;
 
@@ -39,8 +39,7 @@ const PRE_PRACTICE_INSTRUCTION =
 
     "After clicking OK, please put your "               +
     "<i>index</i> fingers on the two "                  +
-    "keys you've just set. Try keep them in those "     +
-    "positions during the <i>entire experiment</i>!<br>"+
+    "keys you've just set."                             +
 
     "<ul>"                                              +
     "<li>Hit the <kbd>%correct_key%</kbd> key for "     +
@@ -48,19 +47,21 @@ const PRE_PRACTICE_INSTRUCTION =
     "<li>Hit the <kbd>%incorrect_key%</kbd> key for "   +
     "<strong>No</strong>.</li>"                         +
     "</ul>"                                             +
+
     "First, you can practice.<br><br>"                  +
     "<i>Click OK to start practicing.</i>"
-;
+    ;
 
 const PREPARE_YES_KEY_PROMPT = `
     <strong>Get your index fingers in position!</strong>
-    <BR><BR>
+    <br>
+    <br>
     Hit your <kbd>%correct_key%</kbd> key (<i>'yes'</i>)
     to start.
     `;
 
 const PRE_TEST_INSTRUCTION =
-    "End of the practice part.<BR><BR>"                 +
+    "End of the practice part.<br><br>"                 +
     "Click OK to continue with the real task."
     ;
 
