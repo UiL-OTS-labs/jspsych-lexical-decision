@@ -5,18 +5,18 @@
 // ACCESS_KEY needs to be used for server setup (data store)
 const ACCESS_KEY = '00000000-0000-0000-0000-000000000000'; 
 
+// default value for pseudorandomisation restrictions
+const MAX_SUCCEEDING_ITEMS_OF_TYPE = 2;
+
 // Default behavior of (sub) trial phases.
 const FIXCROSS_DURATION = 1000;
 const INTERTRIAL_INTERVAL = 1000;
 const PRIME_MASK_DURATION = 100; 
 const PRIME_DURATION = 500;
-const RESPONSE_TIMEOUT_DURATION = 2000; //auto, inluding audio playback duration?
+const RESPONSE_TIMEOUT_DURATION = 2000;
 const FEEDBACK_DURATION = 1000;
 const PRIME_GAP_DURATION = 300;
 const DEFAULT_ITI = 500;
-
-// How many items of the same type may appear in series in case of pseudorandomisation
-const MAX_SUCCEEDING_ITEMS_OF_TYPE = 2;
 
 // Defaults for buttons
 const OK_BUTTON_TEXT = "OK";
@@ -25,7 +25,7 @@ const NO_BUTTON_TEXT = "No";
 const TRUE_BUTTON_TEXT = "True";
 const FALSE_BUTTON_TEXT = "False";
 
-// Deafult restrictions of minimal browser dimensions
+// Default restrictions of minimal browser dimensions
 const MIN_WIDTH = 800;
 const MIN_HEIGHT = 600;
 
