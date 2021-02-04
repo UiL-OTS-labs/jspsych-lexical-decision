@@ -9,9 +9,14 @@ Visually primed auditory lexical decision task with a visual mask: the participa
 
 Crucial trial phases (sub trial phases):
 - Fixation cross
-- Visual Mask (#####)
-- Visual Item (Prime)
+- Visual Mask ('#####')
+- Visual Prime 
 - Auditory item (Decision phase)
+
+### Reference:
+        Rubenstein, H., Garfield, L., & Millikan, J.A. (1970). 
+        Homographic entries in the internal lexicon. 
+        Journal of Verbal Learning and Verbal Behavior, 9, 487≠494.
 
 # Output
 
