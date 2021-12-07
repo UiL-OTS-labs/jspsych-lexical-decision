@@ -37,7 +37,7 @@ const MULTI_CHOICE_HTML =`
 
     <label for="native_language">What is your native language?</label>
     <input type="text" id="native_language" name="native_language"
-        pattern="[a-zA-Z]+" placeholder="Dutch" required>
+        placeholder="Dutch" required>
     <span class="validity"></span>
     <br> 
     <br> 
