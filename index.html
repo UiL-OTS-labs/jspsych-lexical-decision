@@ -445,7 +445,7 @@
         timeline.push(end_screen);
 
         // Start jsPsych when running on a Desktop or Laptop style pc.
-        if (! uil.isMobileOrTablet()) {
+        if (! uil.browser.isMobileOrTablet()) {
             jsPsych.init({
                 timeline: timeline,
                 preload_audio: [
