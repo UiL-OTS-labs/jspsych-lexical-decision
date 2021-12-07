@@ -340,6 +340,7 @@
                 };
                 correct = answer == data.correct_response;
                 data.correct = correct;
+                data.integer_correct = data.correct ? 1 : 0;
                 data.key_chosen_ascii = key_chosen_ascii;
                 data.key_chosen_char = key_chosen_char;
                 data.yes_key = yes_key;
