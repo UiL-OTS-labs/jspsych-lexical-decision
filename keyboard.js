@@ -97,7 +97,7 @@ let test_keyboard_key_left = {
         let key_chosen_ascii = data.key_press;
         let key_chosen_char = 
             upperCaseFromASCII(key_chosen_ascii);
-        data.key_confirmed = data.key_press == expected_key_press;
+        data.key_confirmed = data.key_press === expected_key_press;
         data.key_chosen_ascii = key_chosen_ascii;
         data.key_chosen_char = key_chosen_char;
         left_key_confirmed = data.key_confirmed === true;
@@ -153,7 +153,7 @@ let test_keyboard_key_right = {
             );
         let key_chosen_ascii = data.key_press;
         let key_chosen_char = upperCaseFromASCII(key_chosen_ascii);
-        data.key_confirmed = data.key_press == expected_key_press;
+        data.key_confirmed = data.key_press === expected_key_press;
         data.key_chosen_ascii = key_chosen_ascii;
         data.key_chosen_char = key_chosen_char;
         right_key_confirmed = data.key_confirmed === true;
@@ -176,7 +176,7 @@ let if_validated_key_right_feedback_needed = {
 let if_key_right_node = {
     timeline: [if_validated_key_right_feedback_needed],
     conditional_function: function(){
-        if (right_key_confirmed == true){
+        if (right_key_confirmed === true){
             repeat_validate_right_key = false;
             return false;
         } else {
