@@ -27,7 +27,7 @@ let test_audio_looped = {
             }
         ],
     loop_function: function(data){
-        if (data.values()[0].button_pressed == 0){
+        if (data.values()[0].button_pressed === 0){
             return true; // loop again!
         } else {
             return false; // continue

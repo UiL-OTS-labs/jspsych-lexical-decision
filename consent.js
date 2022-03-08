@@ -191,7 +191,7 @@ let if_node_consent = {
     timeline: [no_consent_end_screen],
     conditional_function: function(data){
         let mydata = getConsentData();
-        if (mydata == CONSENT_STATEMENT){
+        if (mydata === CONSENT_STATEMENT){
             return false;
         } else {
             return true;

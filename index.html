@@ -165,7 +165,7 @@
         {
             let handed = getLeftOrRightHanded().toLowerCase();
             // If left handed, use right. Otherwise, use left.
-            let incorrect_key = (handed == 'left' ? 'right' : 'left') + '_key';
+            let incorrect_key = (handed === 'left' ? 'right' : 'left') + '_key';
             return KEYBOARD_DEFAULTS[chosen_keyboard][incorrect_key];
         }
 
@@ -322,23 +322,23 @@
                 let correct;
                 
                 // now, if this is the first time, we should set the keyboard exp vars
-                if ( yes_key == undefined ){
+                if ( yes_key === undefined ){
                     yes_key = correct_key;
                 }
-                if ( no_key == undefined ){
+                if ( no_key === undefined ){
                     no_key = incorrect_key;
                 }
                 let key_chosen_ascii = data.key_press;
                 let key_chosen_char = upperCaseFromASCII(key_chosen_ascii);
                 
-                if (key_chosen_char == yes_key){
+                if (key_chosen_char === yes_key){
                     answer = 1;
-                } else if (key_chosen_char == no_key){
+                } else if (key_chosen_char === no_key){
                     answer = 0;
                 } else { 
                     answer = undefined;
                 };
-                correct = answer == data.correct_response;
+                correct = answer === data.correct_response;
                 data.correct = correct;
                 data.integer_correct = data.correct ? 1 : 0;
                 data.key_chosen_ascii = key_chosen_ascii;
@@ -353,7 +353,7 @@
             stimulus: function() {
                 let feedback_text = '<span style="color:red;font-size:30px;">Incorrect</span>';
                 let last_resp_acc = jsPsych.data.getLastTrialData().values()[0].correct;
-                if (last_resp_acc == true) {
+                if (last_resp_acc === true) {
                     feedback_text = '<span style="color:green;font-size:30px;">Correct!</span>';
                 }
                 return feedback_text;
