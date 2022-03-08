@@ -311,7 +311,7 @@
                 id: jsPsych.timelineVariable('id'),
                 trial_phase: 'present_word',
                 useful_data_flag: true,
-                correct_response: jsPsych.timelineVariable('correct')
+                expected_answer: jsPsych.timelineVariable('expected_answer')
             },
             on_finish: function(data){
                 let convertToKeyCode = jsPsych.pluginAPI.convertKeyCharacterToKeyCode
@@ -338,7 +338,7 @@
                 } else { 
                     answer = undefined;
                 };
-                correct = answer === data.correct_response;
+                correct = answer === data.expected_answer;
                 data.correct = correct;
                 data.integer_correct = data.correct ? 1 : 0;
                 data.key_chosen_ascii = key_chosen_ascii;

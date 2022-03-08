@@ -1,22 +1,8 @@
-////////////////
-// CONSENT
-///////////////
 
-// Using the multi select plugin.
+// stores wheter or not consent is given.
+let g_consent_given = null;
 
-// This one has an actual checkbox within jsPsych context. 
-// And you can use the 'required = true' if you want to use it as a showstopper page. 
-// Or (like demanded), it is now also possible to use additional conditional stuff, like proceeding 
-// to the end page, probably.
-// In this version, if you want things to look 'UU-legit', it takes a bunch of css within <style> tags
-
-function getConsentData()
-{
-    let data = jsPsych.data.get().select('consent_choice_response');
-    data = JSON.parse(data.values[0]);
-    return data.consent;
-}
-
+/* CSS style for the consent form */
 const CONSENT_HTML_STYLE_UU = `<style>
         body {
             background: rgb(246, 246, 246);
@@ -172,8 +158,9 @@ let consent_block = {
         }
     ],
     on_finish: function(data){
-        let consent_choice = data.responses;   
-        data.consent_choice_response = consent_choice;
+        let consent_choices = JSON.parse(data.responses).consent;
+        let consent_statement = consent_choices.find(element => element === CONSENT_STATEMENT);
+        g_consent_given = consent_statement === CONSENT_STATEMENT;
     }
 };
 
@@ -190,8 +177,7 @@ let no_consent_end_screen = {
 let if_node_consent = {
     timeline: [no_consent_end_screen],
     conditional_function: function(data){
-        let mydata = getConsentData();
-        if (mydata === CONSENT_STATEMENT){
+        if (g_consent_given){
             return false;
         } else {
             return true;
