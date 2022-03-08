@@ -160,7 +160,7 @@ let survey_review_survey_data = {
     on_finish: function(data){
         // Repeat the survey if yes (0) was not pressed.
         // this may give multiple entries, up to the researcher to filter out
-        repeat_survey = data.button_pressed !== 0;         
+        repeat_survey = parseInt(data.button_pressed) !== 0;
     }
 };
 

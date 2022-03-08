@@ -24,7 +24,7 @@ const PRACTICE_ITEMS = [
         wordfn: "./sounds/palve.wav",
         prime: "onion",
         pmask: "#####",
-        correct: 0
+        expected_answer: 0
     },
     {
         id: 2, 
@@ -33,7 +33,7 @@ const PRACTICE_ITEMS = [
         wordfn: "./sounds/hot.wav",
         prime: "stapler",
         pmask: "#######",
-        correct: 1
+        expected_answer: 1
     }
 ];
 
@@ -45,7 +45,7 @@ const LIST_1 = [
         wordfn: "./sounds/slirque.wav",
         prime: "eyes",
         pmask: "####",
-        correct: 0
+        expected_answer: 0
     },
     {
         id: 2, 
@@ -54,7 +54,7 @@ const LIST_1 = [
         wordfn: "./sounds/crawse.wav",
         prime: "piano",
         pmask: "#####",
-        correct: 0
+        expected_answer: 0
     },
     {
         id: 3, 
@@ -63,7 +63,7 @@ const LIST_1 = [
         wordfn: "./sounds/thwurp.wav",
         prime: "rabbit",
         pmask: "######",
-        correct: 0
+        expected_answer: 0
     },
     {
         id: 4, 
@@ -72,7 +72,7 @@ const LIST_1 = [
         wordfn: "./sounds/clem.wav",
         prime: "flower",
         pmask: "######",
-        correct: 0
+        expected_answer: 0
     }, 
     {
         id: 5, 
@@ -81,7 +81,7 @@ const LIST_1 = [
         wordfn: "./sounds/white.wav",
         prime: "snow",
         pmask: "####",
-        correct: 1
+        expected_answer: 1
     },
     {
         id: 6, 
@@ -90,7 +90,7 @@ const LIST_1 = [
         wordfn: "./sounds/travel.wav",
         prime: "suitcase",
         pmask: "########",
-        correct: 1
+        expected_answer: 1
     },
     {
         id: 7, 
@@ -99,7 +99,7 @@ const LIST_1 = [
         wordfn: "./sounds/letter.wav",
         prime: "garden",
         pmask: "######",
-        correct: 1
+        expected_answer: 1
     },
     {
         id: 8, 
@@ -108,7 +108,7 @@ const LIST_1 = [
         wordfn: "./sounds/clown.wav",
         prime: "forest",
         pmask: "######",
-        correct: 1
+        expected_answer: 1
     }
 ];
 
