@@ -55,7 +55,7 @@ function upperCaseFromASCII(keycode)
 }
 
 let select_keyboard_layout = {
-    type: 'html-button-response',
+    type: jsPsychHtmlButtonResponse,
     stimulus: SELECT_KB_INSTRUCTION,
     choices: KEYBOARD_CHOICES,
     prompt: SELECT_KB_PROMPT,
@@ -70,7 +70,7 @@ let select_keyboard_layout = {
 };
 
 let test_keyboard_key_left = {
-    type: 'html-keyboard-response',
+    type: jsPsychHtmlKeyboardResponse,
     stimulus: function(){
         return "<class='stimulus'>" +
                "<p>Press the <kbd>" +
@@ -105,7 +105,7 @@ let test_keyboard_key_left = {
 };
 
 let if_validated_key_left_feedback_needed = {
-    type: 'html-button-response',
+    type: jsPsychHtmlButtonResponse,
     stimulus: function() {
         let wanted_key = KEYBOARD_DEFAULTS[chosen_keyboard]['left_key'];
         let chosen_key = jsPsych.data.getLastTrialData().values()[0].key_chosen_char;
@@ -130,7 +130,7 @@ let if_key_left_node = {
 };
 
 let test_keyboard_key_right = {
-    type: 'html-keyboard-response',
+    type: jsPsychHtmlKeyboardResponse,
     stimulus: function(){
         return "<class='stimulus' >" +
                "<p>Press the <kbd>" +
@@ -161,7 +161,7 @@ let test_keyboard_key_right = {
 };
 
 let if_validated_key_right_feedback_needed = {
-    type: 'html-button-response',
+    type: HtmlButtonResponse,
     stimulus: function() {
         let wanted_key = KEYBOARD_DEFAULTS[chosen_keyboard]['right_key'];
         let chosen_key = 

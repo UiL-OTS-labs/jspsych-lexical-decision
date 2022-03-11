@@ -66,7 +66,7 @@ const HAND_OPTIONS = ["Left", "Right"];
 
 // The multi-choice survey plugin DOES have built-in validation, which is nice
 let survey_multi_choice_block = {
-    type: 'survey-multi-choice',
+    type: jsPsychSurveyMultiChoice,
     data: {
         survey_data_flag: true
     },
@@ -108,7 +108,7 @@ let survey_multi_choice_block = {
 
 // HTML plugin survey block: questions are in the HTML constant
 let survey_multi_html_block = {
-    type: 'survey-html-form',
+    type: jsPsychSurveyHtmlForm',
     preamble: PREPARE_FOR_SURVEY,
     html: MULTI_CHOICE_HTML,
     on_finish: function(data){
@@ -118,7 +118,7 @@ let survey_multi_html_block = {
 };
 
 let survey_review_survey_data = {
-    type: "html-button-response",
+    type: jsPsychHtmlButtonResponse",
     stimulus: function(data){
 
         let survey_html = 

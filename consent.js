@@ -144,7 +144,7 @@ const IF_REQUIRED_FEEDBACK_MESSAGE = `
         `
 
 let consent_block = {
-    type: 'survey-multi-select',
+    type: jsPsychSurveyMultiSelect,
     preamble: CONSENT_HTML_STYLE_UU + CONSENT_HTML,
     required_message: IF_REQUIRED_FEEDBACK_MESSAGE,
     questions: [
@@ -165,7 +165,7 @@ let consent_block = {
 };
 
 let no_consent_end_screen = {
-    type: 'html-button-response',
+    type: jsPsychHtmlButtonResponse,
     stimulus: DEBRIEF_MESSAGE_NO_CONSENT,
     choices: [],
     trial_duration: DEBRIEF_MESSAGE_NO_CONSENT_DURATION,

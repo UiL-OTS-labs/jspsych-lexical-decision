@@ -1,6 +1,6 @@
 
 let start_screen = {
-    type: 'html-button-response',
+    type: jsPsychHtmlButtonResponse,
     stimulus: function(){
         return "<div class='instruction' >" +
                "<p>" + GENERIC_CHECK + "</p></div>";
@@ -10,7 +10,7 @@ let start_screen = {
 };
 
 let instruction_screen_practice = {
-    type: 'html-button-response',
+    type: jsPsychHtmlButtonResponse,
     stimulus: function(){
         let text = PRE_PRACTICE_INSTRUCTION;
         text = text.replace('%correct_key%', getCorrectKey());
@@ -23,7 +23,7 @@ let instruction_screen_practice = {
 };
 
 let participant_keyboard_control_start = {
-    type: 'html-keyboard-response',
+    type: jsPsychHtmlKeyboardResponse,
     stimulus: function(){
         let text = PREPARE_YES_KEY_PROMPT;
         text = text.replace('%correct_key%', getCorrectKey())
@@ -40,7 +40,7 @@ let participant_keyboard_control_start = {
 };
 
 let well_done_screen = {
-    type: 'html-button-response',
+    type: jsPsychHtmlButtonResponse,
     stimulus: function(){
         return "<div class='instruction' >" +
             '<p>' + PRE_TEST_INSTRUCTION + '</p></div>';
@@ -51,21 +51,21 @@ let well_done_screen = {
 };
 
 let end_screen = {
-    type: 'html-button-response',
+    type: jsPsychHtmlButtonResponse,
     stimulus: DEBRIEF_MESSAGE,
     choices: [],
     trial_duration: DEBRIEF_MESSAGE_DURATION
 };
 
 let present_fixation = {
-    type: 'html-keyboard-response',
+    type: jsPsychHtmlKeyboardResponse,
     stimulus: '<span style="font-size:40px;">+</span>',
     choices: jsPsych.NO_KEYS,
     trial_duration: FIXCROSS_DURATION
 };
 
 var present_prime_mask = {
-    type: 'html-keyboard-response',
+    type: jsPsychHtmlKeyboardResponse,
     stimulus: function(){ 
         return "<p class='stimulus'>" + jsPsych.timelineVariable('pmask', true) + "</p>";
     },
@@ -77,7 +77,7 @@ var present_prime_mask = {
 };
 
 let present_prime = {
-    type: 'html-keyboard-response',
+    type: jsPsychHtmlKeyboardResponse,
     stimulus: function(){
         return "<p class='stimulus'>" + 
                jsPsych.timelineVariable('prime', true) + "</p>";
@@ -110,7 +110,7 @@ let present_word_choices = {
 };
 
 let present_word = {
-    type: 'audio-keyboard-response',
+    type: jsPsychAudioKeyboardResponse,
     stimulus: jsPsych.timelineVariable('wordfn'), //this may nee inline func
     choices: present_word_choices,
     prompt: "",
@@ -165,7 +165,7 @@ let present_word = {
 };
 
 let present_feedback = {
-    type: 'html-keyboard-response',
+    type: jsPsychHtmlKeyboardResponse,
     stimulus: function() {
         let feedback_text = '<span style="color:red;font-size:30px;">Incorrect</span>';
         let last_resp_acc = jsPsych.data.getLastTrialData().values()[0].correct;

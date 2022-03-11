@@ -17,7 +17,7 @@ let test_audio_looped = {
     timeline:
         [
             {
-                type: 'audio-button-response',
+                type: jsPsychAudioButtonResponse,
                 stimulus: './sounds/beep.mp3',
                 choices: ['Play Again', 'Continue'],
                 prompt: function(){
