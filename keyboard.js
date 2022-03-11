@@ -77,7 +77,7 @@ let test_keyboard_key_left = {
                 KEYBOARD_DEFAULTS[chosen_keyboard]['left_key'] +
                "</kbd> key on your keyboard.</p>";
     },
-    choices: jsPsych.ALL_KEYS,
+    choices: "ALL_KEYS",
     response_ends_trial: true,
     stimulus_duration: 10000,
     trial_duration: 10000,
@@ -137,7 +137,7 @@ let test_keyboard_key_right = {
                 KEYBOARD_DEFAULTS[chosen_keyboard]['right_key'] +
                "</kbd> key on your keyboard.</p>";
     },
-    choices: jsPsych.ALL_KEYS,
+    choices: "ALL_KEYS",
     response_ends_trial: true,
     stimulus_duration: 10000,
     trial_duration: 10000,
@@ -161,7 +161,7 @@ let test_keyboard_key_right = {
 };
 
 let if_validated_key_right_feedback_needed = {
-    type: HtmlButtonResponse,
+    type: jsPsychHtmlButtonResponse,
     stimulus: function() {
         let wanted_key = KEYBOARD_DEFAULTS[chosen_keyboard]['right_key'];
         let chosen_key = 

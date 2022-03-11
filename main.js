@@ -1,12 +1,6 @@
 
 let jsPsych = initJsPsych(
     {
-        timeline: timeline,
-        preload_audio: [
-            beep_audio,
-            practice_audio,
-            test_audio
-        ],
         exclusions: {
             min_width: MIN_WIDTH,
             min_height: MIN_HEIGHT

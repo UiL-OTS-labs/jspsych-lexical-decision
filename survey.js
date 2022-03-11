@@ -108,7 +108,7 @@ let survey_multi_choice_block = {
 
 // HTML plugin survey block: questions are in the HTML constant
 let survey_multi_html_block = {
-    type: jsPsychSurveyHtmlForm',
+    type: jsPsychSurveyHtmlForm,
     preamble: PREPARE_FOR_SURVEY,
     html: MULTI_CHOICE_HTML,
     on_finish: function(data){
@@ -118,7 +118,7 @@ let survey_multi_html_block = {
 };
 
 let survey_review_survey_data = {
-    type: jsPsychHtmlButtonResponse",
+    type: jsPsychHtmlButtonResponse,
     stimulus: function(data){
 
         let survey_html = 
@@ -178,3 +178,4 @@ let survey_procedure = {
         }
     }
 };
+
