@@ -1,4 +1,22 @@
 
+let jsPsych = initJsPsych(
+    {
+        timeline: timeline,
+        preload_audio: [
+            beep_audio,
+            practice_audio,
+            test_audio
+        ],
+        exclusions: {
+            min_width: MIN_WIDTH,
+            min_height: MIN_HEIGHT
+        },
+        on_finish: function() {
+            uil.saveData(ACCESS_KEY);
+        }
+    }
+);
+
 let start_screen = {
     type: jsPsychHtmlButtonResponse,
     stimulus: function(){
@@ -331,21 +349,7 @@ function initExperiment(stimuli) {
 
     // Start jsPsych when running on a Desktop or Laptop style pc.
     if (! uil.browser.isMobileOrTablet()) {
-        jsPsych.init({
-            timeline: timeline,
-            preload_audio: [
-                beep_audio,
-                practice_audio,
-                test_audio
-                ],
-            exclusions: {
-                min_width: MIN_WIDTH,
-                min_height: MIN_HEIGHT
-            },
-            on_finish: function() {
-                uil.saveData(ACCESS_KEY);
-            }
-        });
+        jsPsych.run(timeline);
     }
     else { // or bail out.
         let paragraph = document.createElement("p")
