@@ -99,11 +99,7 @@ let survey_multi_choice_block = {
             required: true,
             horizontal: true
         }
-    ],
-    on_finish: function(data){
-        let survey_multi_choice = data.responses;   
-        data.survey_multi_choice_responses = survey_multi_choice;
-    }
+    ]
 };
 
 // HTML plugin survey block: questions are in the HTML constant
@@ -111,32 +107,26 @@ let survey_multi_html_block = {
     type: jsPsychSurveyHtmlForm,
     preamble: PREPARE_FOR_SURVEY,
     html: MULTI_CHOICE_HTML,
-    on_finish: function(data){
-        var survey_html_responses = data.responses;
-        data.survey_html_responses = survey_html_responses;
-    }
 };
 
 let survey_review_survey_data = {
     type: jsPsychHtmlButtonResponse,
     stimulus: function(data){
 
-        let survey_html = 
-            jsPsych.data.get().last(2).values()[0].survey_html_responses;
+        let survey_1 = 
+            jsPsych.data.get().last(2).values()[0].response;
         
-        let survey_multi = 
-            jsPsych.data.get().last(1).values()[0].survey_multi_choice_responses;
+        let survey_2 = 
+            jsPsych.data.get().last(1).values()[0].response;
         
-        let jsHTML = JSON.parse(survey_html);
-        let b_year = jsHTML.birth_year;
-        let b_month = jsHTML.birth_month;
-        let n_lang = jsHTML.native_language;
+        let b_year      = survey_1.birth_year;
+        let b_month     = survey_1.birth_month;
+        let n_lang      = survey_1.native_language;
 
-        let jsMulti = JSON.parse(survey_multi);
-        let bilingual = jsMulti.Multilingual;
-        let dyslexic = jsMulti.Dyslexic;
-        let sex = jsMulti.Sex;
-        let hand_pref = jsMulti.HandPreference;
+        let bilingual   = survey_2.Multilingual;
+        let dyslexic    = survey_2.Dyslexic;
+        let sex         = survey_2.Sex;
+        let hand_pref   = survey_2.HandPreference;
 
         return `
             <h1>Your data</h1>
@@ -160,7 +150,7 @@ let survey_review_survey_data = {
     on_finish: function(data){
         // Repeat the survey if yes (0) was not pressed.
         // this may give multiple entries, up to the researcher to filter out
-        repeat_survey = parseInt(data.button_pressed) !== 0;
+        repeat_survey = data.response !== 0;
     }
 };
 

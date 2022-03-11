@@ -61,8 +61,7 @@ let select_keyboard_layout = {
     prompt: SELECT_KB_PROMPT,
     button_html: KEYBOARD_BUTTON_HTML,
     on_finish: function(data) {
-        let button_id = data.button_pressed;
-        let button_number = parseInt(button_id, 10);
+        let button_number = data.response;
         let keyboard_chosen = KEYBOARD_CHOICES[button_number];
         data.keyboard = keyboard_chosen;
         chosen_keyboard = keyboard_chosen;

@@ -158,8 +158,8 @@ let consent_block = {
         }
     ],
     on_finish: function(data){
-        let consent_choices = JSON.parse(data.responses).consent;
-        let consent_statement = consent_choices.find(element => element === CONSENT_STATEMENT);
+        let consent_choices = data.response.consent;
+        let consent_statement = consent_choices.find(element => {return element === CONSENT_STATEMENT});
         g_consent_given = consent_statement === CONSENT_STATEMENT;
     }
 };
