@@ -114,7 +114,7 @@ _"expected_answer"_ | TODO change!         |       | todo           | Now (still
 
 # Getting started 
 People _affiliated with our lab_ can use the information
-[from our lab webiste](https://uilots-labs.wp.hum.uu.nl/experiments/overview/)
+[from our lab website](https://uilots-labs.wp.hum.uu.nl/experiments/overview/)
 and expand the "Online experiments using jsPsych" section for details. Please
 follow [this how-to](https://uilots-labs.wp.hum.uu.nl/how-to/online-experimenting/).
 
