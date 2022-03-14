@@ -99,32 +99,12 @@ let present_prime = {
     post_trial_gap: PRIME_GAP_DURATION
 };
 
-let present_word_choices = {
-    _0: undefined,
-    _1: undefined,
-    get 0() {
-        // This is a caching strategy, to ensure we only have to do
-        // expensive stuff once
-        if (typeof this._0 === 'undefined')
-            this._0 = getCorrectKey();
-
-        return this._0;
-    },
-    get 1() {
-        // This is a caching strategy, to ensure we only have to do
-        // expensive stuff once
-        if (typeof this._1 === 'undefined')
-            this._1 = getIncorrectKey();
-
-        return this._1;
-    },
-    length: 2,
-};
-
 let present_word = {
     type: jsPsychAudioKeyboardResponse,
     stimulus: jsPsych.timelineVariable('wordfn'), //this may nee inline func
-    choices: present_word_choices,
+    choices: function () {
+        return [getCorrectKey(), getIncorrectKey()];
+    },
     prompt: "",
     trial_ends_after_audio: false,
     trial_duration: RESPONSE_TIMEOUT_DURATION,
@@ -228,28 +208,21 @@ let trial_procedure_random = {
 
 
 // regular JS functions
-function getLeftOrRightHanded()
-{
-    let surveydata = jsPsych.data.get().select('survey_multi_choice_responses');
-    let datavalues = surveydata.values;
-    let lastdatavalues = datavalues[datavalues.length - 1];
-    let parsedvalues = JSON.parse(lastdatavalues);
-    handpref = parsedvalues.HandPreference;
-    return(parsedvalues.HandPreference);
-}
 
 function getCorrectKey()
 {
-    let handed = getLeftOrRightHanded().toLowerCase();
-    return KEYBOARD_DEFAULTS[chosen_keyboard][handed + '_key'];
+    if (participant_info.hand_pref === ParticipantInfo.RIGHT)
+        return KEYBOARD_DEFAULTS[chosen_keyboard].right_key;
+    else
+        return KEYBOARD_DEFAULTS[chosen_keyboard].left_key;
 }
 
 function getIncorrectKey()
 {
-    let handed = getLeftOrRightHanded().toLowerCase();
-    // If left handed, use right. Otherwise, use left.
-    let incorrect_key = (handed === 'left' ? 'right' : 'left') + '_key';
-    return KEYBOARD_DEFAULTS[chosen_keyboard][incorrect_key];
+    if (participant_info.hand_pref === ParticipantInfo.RIGHT)
+        return KEYBOARD_DEFAULTS[chosen_keyboard].left_key;
+    else
+        return KEYBOARD_DEFAULTS[chosen_keyboard].right_key;
 }
 
 function initExperiment(stimuli) {
