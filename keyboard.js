@@ -36,13 +36,6 @@ const KEYBOARD_BUTTON_HTML = `
         <img src=./images/%choice%.png></button>
         `;
 
-// logic variables used by the keyboard validation routines
-var repeat_validate_left_key = false;
-var repeat_validate_right_key = false;
-
-var left_key_confirmed = false;
-var right_key_confirmed = false;
-
 var chosen_keyboard = undefined;
 
 var yes_key = undefined;
@@ -82,24 +75,18 @@ let test_keyboard_key_left = {
     trial_duration: 10000,
     post_trial_gap: 1000,
     prompt: "Please respond within 10 seconds.",
+    confirmed: false, // whether or not the particpant pressed the expected button
+    pressed: null,
     data: {
         trial_phase: 'test_keyboard_key_left'
     },
-    loop_function: function(data){
-        return repeat_validate_left_key;
-    },
     on_finish: function(data) {
-        let expected_key_press = 
-            jsPsych.pluginAPI.convertKeyCharacterToKeyCode(
-            KEYBOARD_DEFAULTS[chosen_keyboard]['left_key']
-            );
-        let key_chosen_ascii = data.key_press;
-        let key_chosen_char = 
-            upperCaseFromASCII(key_chosen_ascii);
-        data.key_confirmed = data.key_press === expected_key_press;
-        data.key_chosen_ascii = key_chosen_ascii;
-        data.key_chosen_char = key_chosen_char;
-        left_key_confirmed = data.key_confirmed === true;
+        let expected_key_press = KEYBOARD_DEFAULTS[chosen_keyboard]['left_key'];
+        test_keyboard_key_left.pressed = data.response.toUpperCase();
+        test_keyboard_key_left.confirmed =
+            test_keyboard_key_left.pressed === expected_key_press;
+        data.key_confirmed = test_keyboard_key_left.confirmed;
+        data.pressed = test_keyboard_key_left.pressed;
     }
 };
 
@@ -107,7 +94,7 @@ let if_validated_key_left_feedback_needed = {
     type: jsPsychHtmlButtonResponse,
     stimulus: function() {
         let wanted_key = KEYBOARD_DEFAULTS[chosen_keyboard]['left_key'];
-        let chosen_key = jsPsych.data.getLastTrialData().values()[0].key_chosen_char;
+        let chosen_key = test_keyboard_key_left.pressed;
         return "<p> You were asked to press: " + wanted_key + "<BR><BR>" + 
                "You pressed: " + chosen_key +
                "<BR><BR>Try again, please...</p>";
@@ -118,13 +105,7 @@ let if_validated_key_left_feedback_needed = {
 let if_key_left_node = {
     timeline: [if_validated_key_left_feedback_needed],
     conditional_function: function(){
-        if (left_key_confirmed === true){
-            repeat_validate_left_key = false;
-            return false;
-        } else {
-            repeat_validate_left_key = true;
-            return true;
-        }
+        return test_keyboard_key_left.confirmed !== true;
     }
 };
 
@@ -142,20 +123,20 @@ let test_keyboard_key_right = {
     trial_duration: 10000,
     post_trial_gap: 1000,
     prompt: "Please respond within 10 seconds",
+    confirmed: false, // whether or not the particpant pressed the expected button
+    pressed: null, // the key pressed.
     data: {
         trial_phase: 'test_keyboard_key_right'
     },
     on_finish: function(data) {
-        let expected_key_press = 
-            jsPsych.pluginAPI.convertKeyCharacterToKeyCode(
-            KEYBOARD_DEFAULTS[chosen_keyboard]['right_key']
-            );
-        let key_chosen_ascii = data.key_press;
-        let key_chosen_char = upperCaseFromASCII(key_chosen_ascii);
-        data.key_confirmed = data.key_press === expected_key_press;
-        data.key_chosen_ascii = key_chosen_ascii;
-        data.key_chosen_char = key_chosen_char;
-        right_key_confirmed = data.key_confirmed === true;
+        let expected_key_press = KEYBOARD_DEFAULTS[chosen_keyboard]['right_key']
+
+        test_keyboard_key_right.pressed = data.response.toUpperCase();
+        test_keyboard_key_right.confirmed =
+            test_keyboard_key_right.pressed === expected_key_press;
+        data.key_confirmed = test_keyboard_key_right.confirmed;
+        data.pressed = test_keyboard_key_right.pressed;
+
     }
 };
 
@@ -175,13 +156,7 @@ let if_validated_key_right_feedback_needed = {
 let if_key_right_node = {
     timeline: [if_validated_key_right_feedback_needed],
     conditional_function: function(){
-        if (right_key_confirmed === true){
-            repeat_validate_right_key = false;
-            return false;
-        } else {
-            repeat_validate_right_key = true;
-            return true;
-        }
+        return test_keyboard_key_right.confirmed !== true;
     }
 };
 
@@ -191,7 +166,7 @@ let keyboard_set_key_left_procedure = {
         if_key_left_node,
     ],
     loop_function: function(){
-        return repeat_validate_left_key === true;
+        return test_keyboard_key_left.confirmed !== true;
     }
 }; 
 
@@ -201,6 +176,6 @@ let keyboard_set_key_right_procedure = {
         if_key_right_node,
     ],
     loop_function: function(){
-        return repeat_validate_right_key === true;
+        return test_keyboard_key_right.confirmed !== true;
     }
 }; 
