@@ -25,8 +25,8 @@ let instruction_screen_practice = {
     type: jsPsychHtmlButtonResponse,
     stimulus: function(){
         let text = PRE_PRACTICE_INSTRUCTION;
-        text = text.replace('%correct_key%', getCorrectKey());
-        text = text.replace('%incorrect_key%', getIncorrectKey());
+        text = text.replace('%correct_key%', getWordKey());
+        text = text.replace('%incorrect_key%', getNonWordKey());
         return "<div class='instruction' >" +
                "<p>" + text + "</p></div>";
     },
@@ -38,12 +38,12 @@ let participant_keyboard_control_start = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: function(){
         let text = PREPARE_YES_KEY_PROMPT;
-        text = text.replace('%correct_key%', getCorrectKey())
+        text = text.replace('%correct_key%', getWordKey())
         return "<div class='instruction' >" +
                "<p>" + text + "</p></div>";
     },
     choices: function(){
-        let choice = getCorrectKey();
+        let choice = getWordKey();
         return [choice];
     },
     //trial_duration: 10000,
@@ -103,7 +103,7 @@ let present_word = {
     type: jsPsychAudioKeyboardResponse,
     stimulus: jsPsych.timelineVariable('wordfn'), //this may nee inline func
     choices: function () {
-        return [getCorrectKey(), getIncorrectKey()];
+        return [getWordKey(), getNonWordKey()];
     },
     prompt: "",
     trial_ends_after_audio: false,
@@ -124,33 +124,22 @@ let present_word = {
     on_finish: function(data){
         let convertToKeyCode = jsPsych.pluginAPI.convertKeyCharacterToKeyCode
         
-        let correct_key = getCorrectKey()
-        let incorrect_key = getIncorrectKey();
+        let word_key = getWordKey()
+        let non_word_key = getNonWordKey();
+        let pressed_key = data.response.toUpperCase();
         let answer;
         let correct;
         
-        // now, if this is the first time, we should set the keyboard exp vars
-        if ( yes_key === undefined ){
-            yes_key = correct_key;
-        }
-        if ( no_key === undefined ){
-            no_key = incorrect_key;
-        }
-        let key_chosen_ascii = data.key_press;
-        let key_chosen_char = upperCaseFromASCII(key_chosen_ascii);
-        
-        if (key_chosen_char === yes_key){
-            answer = 1;
-        } else if (key_chosen_char === no_key){
-            answer = 0;
-        } else { 
-            answer = undefined;
-        };
+        data.pressed_key = pressed_key;
+
+        console.assert(pressed_key === word_key || pressed_key === non_word_key);
+        answer = pressed_key === word_key ? 1 : 0;
+
         correct = answer === data.expected_answer;
+        data.answer = answer;
         data.correct = correct;
         data.integer_correct = data.correct ? 1 : 0;
-        data.key_chosen_ascii = key_chosen_ascii;
-        data.key_chosen_char = key_chosen_char;
+        data.pressed_key = pressed_key;
         data.yes_key = yes_key;
         data.no_key = no_key;
     }
@@ -209,7 +198,11 @@ let trial_procedure_random = {
 
 // regular JS functions
 
-function getCorrectKey()
+/**
+ * Gets the key which pp use to respond it's a word.
+ * @return {string|*}
+ */
+function getWordKey()
 {
     if (participant_info.hand_pref === ParticipantInfo.RIGHT)
         return KEYBOARD_DEFAULTS[chosen_keyboard].right_key;
@@ -217,7 +210,11 @@ function getCorrectKey()
         return KEYBOARD_DEFAULTS[chosen_keyboard].left_key;
 }
 
-function getIncorrectKey()
+/**
+ * Gets the key which pp use to respond it not a word.
+ * @return {string|*}
+ */
+function getNonWordKey()
 {
     if (participant_info.hand_pref === ParticipantInfo.RIGHT)
         return KEYBOARD_DEFAULTS[chosen_keyboard].left_key;
