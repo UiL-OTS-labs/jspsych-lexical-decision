@@ -13,7 +13,7 @@ This experiment is based on the previous experiments of the Uil-OTS labs:
 - **jspsych-audlexdec-vp**    lexical decision (auditory target stimulus) + visual prime
 - **jspsych-audlexdec-vp-vm** lexical decision (auditory target stimulus) + visual masked prime
 
-however, it is one experient capable of running all subflavors above. The list
+however, it is one experiment capable of running all subflavors above. The list
 of stimuli will determine what subflavor will presentented to the subjects of this
 experiment.
 
@@ -113,7 +113,7 @@ _"expected_answer"_ | TODO change!         |       | todo           | Now (still
 
 
 
-# Getting started 
+# Getting started
 People _affiliated with our lab_ can use the information
 [from our lab webiste](https://uilots-labs.wp.hum.uu.nl/experiments/overview/)
 and expand the "Online experiments using jsPsych" section for details. Please
@@ -134,9 +134,10 @@ approved. For elaborate info see `globals.js`.
 - Open the file `stimuli.js` in your plain text editor.
 - There is a list, called LIST_1:
 
-```javacript
+  ```javacript
   const LIST_1 = [ // stimuli and timeline variables
-```
+  ```
+  For a more elaborate example see the Adding stimuli section below.
 - This list can be adapted to your own needs, i.e, you can replace values,
   make the list longer (don't forget to increment the 'id' values for new items!).
 - If you need to implement a more complex design, you should read the
@@ -144,3 +145,62 @@ approved. For elaborate info see `globals.js`.
 - For an example of a Latin square design, please have a look
   [here](https://github.com/UiL-OTS-labs/jspsych-spr-mw).
 
+### Adding stimuli
+
+In the file stimuli.js, one needs to add stimuli to one or multiple lists.
+One full description of one trial looks like this:
+```javascript
+const LIST_1 = [
+    {
+        // We recommend always to use these first tree items.
+        id: 1,                      // Always use incrementing id's e.g 1, 2, etc.
+        item_type: RELATED,         // Always denote the item_type/condition.
+        word: "palve",              // Always show which word is being presented
+                                    //  as target.
+        expected_answer: 0,         // 0 when word is a NONword, 1 if it IS a word.
+
+        // The next items are optional, you may leave them empty "", null, undefined
+        // or simply omit them if you don't use them, leaving them out is the
+        // preferred method.
+
+        // A visual mask presented prior to the prime. You are free to omit it, then
+        // no forward prime will be presented.
+        forward_mask: "#####",
+
+        // primes Optional you are free to omit both of them.
+        visual_prime : "prime",     // A word presented on the screen as prime
+
+        // an auditory prime make sure the file exists.
+        auditory_prime : "./sounds/prime.wav",
+
+        // Similar to the forward mask, only enter it in the stimuli when needed.
+        backward_mask : "#####",
+
+        // The target stimuli, you should use precisely one of the two options below.
+
+        // A sound file containing the target word
+        auditory_target : "./sounds/palve.wav",
+
+        // A word that will be displayed on screen.
+        visual_target : "palve"
+    }
+]
+```
+The example above shows all options, in order to demonstrate what you would add
+to the stimuli. However, consider what would happen when you provide both a
+auditory and a visual target word. The experiment has to present them both
+and that won't be very handy. So in a very simple visual lexical decision
+without priming you can simplify the description of the stimulus list to:
+```javascript
+const LIST_1 = [
+    {
+        id: 1,
+        item_type: RELATED,
+        word: "palve",
+        expected_answer: 0,
+        visual_target : "palve"
+    }
+]
+```
+So this is not so long as one might be scared of ;-).
+Good luck, happy experimenting!
