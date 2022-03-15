@@ -33,7 +33,7 @@ Crucial trial phases (sub trial phases):
 - Fixation cross 
 - (optional) Visual Forward Mask ('#####')
 - (optional) Visual or auditory Prime
-- Visual Backward Mask
+- (optional) Visual Backward Mask
 - Target visual or auditory stimulus (Decision phase)
 
 ### Reference:
