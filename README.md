@@ -30,9 +30,10 @@ to respond as quickly as possible and indicate wether the heard word is a real
 word or not.
 
 Crucial trial phases (sub trial phases):
-- Fixation cross
-- Visual/auditory Prime
-- Visual Mask ('#####')
+- Fixation cross 
+- (optional) Visual Forward Mask ('#####')
+- (optional) Visual or auditory Prime
+- Visual Backward Mask
 - Target visual or auditory stimulus (Decision phase)
 
 ### Reference:
