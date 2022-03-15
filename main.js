@@ -1,6 +1,18 @@
 
+let jsPsych = initJsPsych(
+    {
+        exclusions: {
+            min_width: MIN_WIDTH,
+            min_height: MIN_HEIGHT
+        },
+        on_finish: function() {
+            uil.saveData(ACCESS_KEY);
+        }
+    }
+);
+
 let start_screen = {
-    type: 'html-button-response',
+    type: jsPsychHtmlButtonResponse,
     stimulus: function(){
         return "<div class='instruction' >" +
                "<p>" + GENERIC_CHECK + "</p></div>";
@@ -10,11 +22,11 @@ let start_screen = {
 };
 
 let instruction_screen_practice = {
-    type: 'html-button-response',
+    type: jsPsychHtmlButtonResponse,
     stimulus: function(){
         let text = PRE_PRACTICE_INSTRUCTION;
-        text = text.replace('%correct_key%', getCorrectKey());
-        text = text.replace('%incorrect_key%', getIncorrectKey());
+        text = text.replace('%correct_key%', getWordKey());
+        text = text.replace('%incorrect_key%', getNonWordKey());
         return "<div class='instruction' >" +
                "<p>" + text + "</p></div>";
     },
@@ -23,15 +35,15 @@ let instruction_screen_practice = {
 };
 
 let participant_keyboard_control_start = {
-    type: 'html-keyboard-response',
+    type: jsPsychHtmlKeyboardResponse,
     stimulus: function(){
         let text = PREPARE_YES_KEY_PROMPT;
-        text = text.replace('%correct_key%', getCorrectKey())
+        text = text.replace('%correct_key%', getWordKey())
         return "<div class='instruction' >" +
                "<p>" + text + "</p></div>";
     },
     choices: function(){
-        let choice = getCorrectKey();
+        let choice = getWordKey();
         return [choice];
     },
     //trial_duration: 10000,
@@ -40,7 +52,7 @@ let participant_keyboard_control_start = {
 };
 
 let well_done_screen = {
-    type: 'html-button-response',
+    type: jsPsychHtmlButtonResponse,
     stimulus: function(){
         return "<div class='instruction' >" +
             '<p>' + PRE_TEST_INSTRUCTION + '</p></div>';
@@ -51,21 +63,21 @@ let well_done_screen = {
 };
 
 let end_screen = {
-    type: 'html-button-response',
+    type: jsPsychHtmlButtonResponse,
     stimulus: DEBRIEF_MESSAGE,
     choices: [],
     trial_duration: DEBRIEF_MESSAGE_DURATION
 };
 
 let present_fixation = {
-    type: 'html-keyboard-response',
+    type: jsPsychHtmlKeyboardResponse,
     stimulus: '<span style="font-size:40px;">+</span>',
     choices: jsPsych.NO_KEYS,
     trial_duration: FIXCROSS_DURATION
 };
 
 var present_prime_mask = {
-    type: 'html-keyboard-response',
+    type: jsPsychHtmlKeyboardResponse,
     stimulus: function(){ 
         return "<p class='stimulus'>" + jsPsych.timelineVariable('pmask', true) + "</p>";
     },
@@ -77,7 +89,7 @@ var present_prime_mask = {
 };
 
 let present_prime = {
-    type: 'html-keyboard-response',
+    type: jsPsychHtmlKeyboardResponse,
     stimulus: function(){
         return "<p class='stimulus'>" + 
                jsPsych.timelineVariable('prime', true) + "</p>";
@@ -87,85 +99,54 @@ let present_prime = {
     post_trial_gap: PRIME_GAP_DURATION
 };
 
-let present_word_choices = {
-    _0: undefined,
-    _1: undefined,
-    get 0() {
-        // This is a caching strategy, to ensure we only have to do
-        // expensive stuff once
-        if (typeof this._0 === 'undefined')
-            this._0 = getCorrectKey();
-
-        return this._0;
-    },
-    get 1() {
-        // This is a caching strategy, to ensure we only have to do
-        // expensive stuff once
-        if (typeof this._1 === 'undefined')
-            this._1 = getIncorrectKey();
-
-        return this._1;
-    },
-    length: 2,
-};
-
 let present_word = {
-    type: 'audio-keyboard-response',
+    type: jsPsychAudioKeyboardResponse,
     stimulus: jsPsych.timelineVariable('wordfn'), //this may nee inline func
-    choices: present_word_choices,
+    choices: function () {
+        return [getWordKey(), getNonWordKey()];
+    },
     prompt: "",
     trial_ends_after_audio: false,
     trial_duration: RESPONSE_TIMEOUT_DURATION,
     response_ends_trial: true,
     post_trial_gap: DEFAULT_ITI,
-    data: {
-        condition: jsPsych.timelineVariable('item_type'),
-        word: jsPsych.timelineVariable('word'),
-        word_file: jsPsych.timelineVariable('wordfn'),
-        prime: jsPsych.timelineVariable('prime'),
-        prime_mask: jsPsych.timelineVariable('pmask'),
-        id: jsPsych.timelineVariable('id'),
-        trial_phase: 'present_word',
-        useful_data_flag: true,
-        expected_answer: jsPsych.timelineVariable('expected_answer')
-    },
     on_finish: function(data){
-        let convertToKeyCode = jsPsych.pluginAPI.convertKeyCharacterToKeyCode
-        
-        let correct_key = getCorrectKey()
-        let incorrect_key = getIncorrectKey();
+
+        let word_key = getWordKey();
         let answer;
         let correct;
-        
-        // now, if this is the first time, we should set the keyboard exp vars
-        if ( yes_key === undefined ){
-            yes_key = correct_key;
+        let pressed_key = null;
+
+        if (data.response !== null) {
+            pressed_key = data.response.toUpperCase();
         }
-        if ( no_key === undefined ){
-            no_key = incorrect_key;
-        }
-        let key_chosen_ascii = data.key_press;
-        let key_chosen_char = upperCaseFromASCII(key_chosen_ascii);
-        
-        if (key_chosen_char === yes_key){
-            answer = 1;
-        } else if (key_chosen_char === no_key){
-            answer = 0;
-        } else { 
-            answer = undefined;
-        };
+
+        // Add "static" information to output
+        data.condition = jsPsych.timelineVariable('item_type');
+        data.word = jsPsych.timelineVariable('word');
+        data.word_file = jsPsych.timelineVariable('wordfn');
+        data.prime = jsPsych.timelineVariable('prime');
+        data.prime_mask = jsPsych.timelineVariable('pmask');
+        data.id = jsPsych.timelineVariable('id');
+        data.expected_answer = jsPsych.timelineVariable('expected_answer');
+        data.useful_data_flag = true;
+
+        answer = pressed_key === word_key ? 1 : 0;
         correct = answer === data.expected_answer;
+
+        // Add dynamic info to output.
+        data.pressed_key = pressed_key;
+        data.answer = answer;
         data.correct = correct;
         data.integer_correct = data.correct ? 1 : 0;
-        data.key_chosen_ascii = key_chosen_ascii;
-        data.key_chosen_char = key_chosen_char;
+        data.pressed_key = pressed_key;
         data.yes_key = yes_key;
         data.no_key = no_key;
     }
 };
 
 let present_feedback = {
-    type: 'html-keyboard-response',
+    type: jsPsychHtmlKeyboardResponse,
     stimulus: function() {
         let feedback_text = '<span style="color:red;font-size:30px;">Incorrect</span>';
         let last_resp_acc = jsPsych.data.getLastTrialData().values()[0].correct;
@@ -216,28 +197,29 @@ let trial_procedure_random = {
 
 
 // regular JS functions
-function getLeftOrRightHanded()
+
+/**
+ * Gets the key which pp use to respond it's a word.
+ * @return {string|*}
+ */
+function getWordKey()
 {
-    let surveydata = jsPsych.data.get().select('survey_multi_choice_responses');
-    let datavalues = surveydata.values;
-    let lastdatavalues = datavalues[datavalues.length - 1];
-    let parsedvalues = JSON.parse(lastdatavalues);
-    handpref = parsedvalues.HandPreference;
-    return(parsedvalues.HandPreference);
+    if (participant_info.hand_pref === ParticipantInfo.RIGHT)
+        return KEYBOARD_DEFAULTS[chosen_keyboard].right_key;
+    else
+        return KEYBOARD_DEFAULTS[chosen_keyboard].left_key;
 }
 
-function getCorrectKey()
+/**
+ * Gets the key which pp use to respond it not a word.
+ * @return {string|*}
+ */
+function getNonWordKey()
 {
-    let handed = getLeftOrRightHanded().toLowerCase();
-    return KEYBOARD_DEFAULTS[chosen_keyboard][handed + '_key'];
-}
-
-function getIncorrectKey()
-{
-    let handed = getLeftOrRightHanded().toLowerCase();
-    // If left handed, use right. Otherwise, use left.
-    let incorrect_key = (handed === 'left' ? 'right' : 'left') + '_key';
-    return KEYBOARD_DEFAULTS[chosen_keyboard][incorrect_key];
+    if (participant_info.hand_pref === ParticipantInfo.RIGHT)
+        return KEYBOARD_DEFAULTS[chosen_keyboard].left_key;
+    else
+        return KEYBOARD_DEFAULTS[chosen_keyboard].right_key;
 }
 
 function initExperiment(stimuli) {
@@ -331,21 +313,7 @@ function initExperiment(stimuli) {
 
     // Start jsPsych when running on a Desktop or Laptop style pc.
     if (! uil.browser.isMobileOrTablet()) {
-        jsPsych.init({
-            timeline: timeline,
-            preload_audio: [
-                beep_audio,
-                practice_audio,
-                test_audio
-                ],
-            exclusions: {
-                min_width: MIN_WIDTH,
-                min_height: MIN_HEIGHT
-            },
-            on_finish: function() {
-                uil.saveData(ACCESS_KEY);
-            }
-        });
+        jsPsych.run(timeline);
     }
     else { // or bail out.
         let paragraph = document.createElement("p")

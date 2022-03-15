@@ -25,6 +25,14 @@ const NO_BUTTON_TEXT = "No";
 const TRUE_BUTTON_TEXT = "True";
 const FALSE_BUTTON_TEXT = "False";
 
+const LEFT_TEXT = "Left";
+const RIGHT_TEXT = "Right";
+
+const GENDER_MALE = "Male";
+const GENDER_FEMALE = "Female";
+const GENDER_OTHER = "Other";
+const GENDER_PREFER_NOT_SAY = "Prefer not to say";
+
 // Default restrictions of minimal browser dimensions
 const MIN_WIDTH = 800;
 const MIN_HEIGHT = 600;
