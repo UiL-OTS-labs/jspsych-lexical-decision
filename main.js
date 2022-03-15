@@ -110,32 +110,32 @@ let present_word = {
     trial_duration: RESPONSE_TIMEOUT_DURATION,
     response_ends_trial: true,
     post_trial_gap: DEFAULT_ITI,
-    data: {
-        condition: jsPsych.timelineVariable('item_type'),
-        word: jsPsych.timelineVariable('word'),
-        word_file: jsPsych.timelineVariable('wordfn'),
-        prime: jsPsych.timelineVariable('prime'),
-        prime_mask: jsPsych.timelineVariable('pmask'),
-        id: jsPsych.timelineVariable('id'),
-        trial_phase: 'present_word',
-        useful_data_flag: true,
-        expected_answer: jsPsych.timelineVariable('expected_answer')
-    },
     on_finish: function(data){
-        let convertToKeyCode = jsPsych.pluginAPI.convertKeyCharacterToKeyCode
-        
-        let word_key = getWordKey()
-        let non_word_key = getNonWordKey();
-        let pressed_key = data.response.toUpperCase();
+
+        let word_key = getWordKey();
         let answer;
         let correct;
-        
-        data.pressed_key = pressed_key;
+        let pressed_key = null;
 
-        console.assert(pressed_key === word_key || pressed_key === non_word_key);
+        if (data.response !== null) {
+            pressed_key = data.response.toUpperCase();
+        }
+
+        // Add "static" information to output
+        data.condition = jsPsych.timelineVariable('item_type');
+        data.word = jsPsych.timelineVariable('word');
+        data.word_file = jsPsych.timelineVariable('wordfn');
+        data.prime = jsPsych.timelineVariable('prime');
+        data.prime_mask = jsPsych.timelineVariable('pmask');
+        data.id = jsPsych.timelineVariable('id');
+        data.expected_answer = jsPsych.timelineVariable('expected_answer');
+        data.useful_data_flag = true;
+
         answer = pressed_key === word_key ? 1 : 0;
-
         correct = answer === data.expected_answer;
+
+        // Add dynamic info to output.
+        data.pressed_key = pressed_key;
         data.answer = answer;
         data.correct = correct;
         data.integer_correct = data.correct ? 1 : 0;
