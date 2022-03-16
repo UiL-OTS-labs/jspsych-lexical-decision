@@ -22,7 +22,7 @@ const PRACTICE_ITEMS = [
         item_type: PRACTICE, 
         word: "palve",
         visual_prime: "onion",
-        backward_mask: "#####",
+        forward_mask: "#####",
         visual_target: "palve",
         expected_answer: 0
     },
@@ -31,7 +31,7 @@ const PRACTICE_ITEMS = [
         item_type: PRACTICE, 
         word: "hot", 
         visual_prime: "stapler",
-        backward_mask: "#######",
+        forward_mask: "#######",
         visual_target: "hot",
         expected_answer: 1
     }
@@ -147,3 +147,59 @@ function pickRandomList() {
     return retlist
 }
 
+/**
+ * Checks whether a stimulus contains precisely 1 target stimulus
+ *
+ * @param {object} trial
+ *
+ * @return {boolean}  true if the trial contains precisely one target.
+ */
+function containsOneTarget(trial) {
+    let sum = 0;
+    let has_visual = typeof trial.visual_target === "string" && trial.visual_target.length > 0;
+    let has_auditory = typeof trial.visual_target === "string" && trial.visual_target.length > 0;
+    if (has_visual)
+        sum += 1;
+    if (has_auditory)
+        sum += 1;
+    return sum === 1;
+}
+
+/**
+ * Checks whether the trial doesn't contain more than 1 prime.
+ * @param trial
+ * @return {boolean}
+ */
+function containsAtMostOnePrime(trial) {
+    let sum = 0;
+    let visprime = trial.visual_prime && trial.visual_prime.length > 0;
+    let audprime = trial.auditory_prime && trial.auditory_prime.length > 0;
+    if (visprime) {
+        sum++;
+    }
+    if (audprime) {
+        sum++;
+    }
+    return sum <= 1;
+}
+
+function validateStimuli() {
+    TEST_ITEMS.forEach((titem) => {
+
+        let listname = timem.list_name;
+        let stimuli = titem.table;
+
+        stimuli.forEach((trial) => {
+
+            let stim_string =
+                `The stimulus with id "${trial.id}" in list "${listname} "`;
+
+            if (!containsOneTarget(trial)) {
+                console.error(stim_string + "does not contain precisely 1 target.")
+            }
+            if (!containsAtMostOnePrime(trial)) {
+                console.error(stim_string + "does not contain at most 1 prime.")
+            }
+        });
+    });
+}

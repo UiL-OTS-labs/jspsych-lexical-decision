@@ -77,7 +77,7 @@ function createChoicesArray() {
     return [getWordKey(), getNonWordKey()];
 }
 
-/**
+/*
  * This saves the data of a visual or auditory target stimulus
  */
 function saveTargetData(data) {
@@ -95,10 +95,10 @@ function saveTargetData(data) {
     data.condition = jsPsych.timelineVariable('item_type');
     data.word = jsPsych.timelineVariable('word');
     data.expected_answer = jsPsych.timelineVariable('expected_answer');
-    data.forward_prime = jsPsych.timelineVariable('forward_prime');
+    data.forward_mask = jsPsych.timelineVariable('forward_mask');
     data.visual_prime = jsPsych.timelineVariable('visual_prime');
     data.auditory_prime = jsPsych.timelineVariable('auditory_prime');
-    data.backward_prime = jsPsych.timelineVariable('backward_prime');
+    data.backward_mask = jsPsych.timelineVariable('backward_mask');
     data.auditory_target = jsPsych.timelineVariable('auditory_target');
     data.visual_target = jsPsych.timelineVariable('visual_target');
     data.useful_data_flag = true; // Mark this stimulus as import for analysis.
