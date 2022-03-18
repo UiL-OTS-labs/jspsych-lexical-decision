@@ -16,7 +16,7 @@ const LISTS = ["list1"];
 //     "list2"
 // ];
 
-const PRACTICE_ITEMS = [
+const PRACTICE_LIST = [
     {
         id: 1, 
         item_type: PRACTICE, 
@@ -42,72 +42,72 @@ const LIST_1 = [
         id: 1, 
         item_type: NON_WORD, 
         word: "slirque", 
-        auditory_target: "./sounds/slirque.wav",
         visual_prime: "eyes",
         backward_mask: "####",
+        auditory_target: "./sounds/slirque.wav",
         expected_answer: 0
     },
     {
         id: 2, 
         item_type: NON_WORD, 
         word: "crawse", 
-        auditory_target: "./sounds/crawse.wav",
         visual_prime:  "piano",
         backward_mask: "#####",
+        auditory_target: "./sounds/crawse.wav",
         expected_answer: 0
     },
     {
         id: 3, 
         item_type: NON_WORD, 
         word: "thwurp", 
-        auditory_target: "./sounds/thwurp.wav",
         visual_prime:  "rabbit",
         backward_mask: "######",
+        auditory_target: "./sounds/thwurp.wav",
         expected_answer: 0
     },
     {
         id: 4, 
         item_type: NON_WORD, 
         word: "clem", 
-        auditory_target: "./sounds/clem.wav",
         visual_prime:  "flower",
         backward_mask: "######",
+        auditory_target: "./sounds/clem.wav",
         expected_answer: 0
     }, 
     {
         id: 5, 
         item_type: RELATED, 
         word: "white", 
-        auditory_target: "./sounds/white.wav",
         visual_prime:  "snow",
         backward_mask: "####",
+        auditory_target: "./sounds/white.wav",
         expected_answer: 1
     },
     {
         id: 6, 
         item_type: RELATED, 
         word: "travel", 
-        auditory_target: "./sounds/travel.wav",
         visual_prime:  "suitcase",
         backward_mask: "########",
+        auditory_target: "./sounds/travel.wav",
         expected_answer: 1
     },
     {
         id: 7, 
         item_type: UNRELATED, 
         word: "letter", 
-        auditory_target: "./sounds/letter.wav",
         visual_prime:  "garden",
         backward_mask: "######",
+        auditory_target: "./sounds/letter.wav",
         expected_answer: 1
     },
     {
         id: 8, 
         item_type: UNRELATED, 
         word: "clown", 
-        auditory_target: "./sounds/clown.wav",
         visual_prime:  "forest",
         backward_mask: "######",
+        auditory_target: "./sounds/clown.wav",
         expected_answer: 1
     }
 ];
@@ -129,7 +129,7 @@ const TEST_ITEMS = [
 // ];
 
 function getPracticeItems() {
-    return {list_name : "practice", table : PRACTICE_ITEMS};
+    return {list_name : "practice", table : PRACTICE_LIST};
 }
 
 function pickRandomList() {
@@ -156,8 +156,10 @@ function pickRandomList() {
  */
 function containsOneTarget(trial) {
     let sum = 0;
-    let has_visual = typeof trial.visual_target === "string" && trial.visual_target.length > 0;
-    let has_auditory = typeof trial.visual_target === "string" && trial.visual_target.length > 0;
+    let has_visual =   typeof trial.visual_target === "string" &&
+                       trial.visual_target.length > 0;
+    let has_auditory = typeof trial.auditory_target === "string" &&
+                       trial.auditory_target.length > 0;
     if (has_visual)
         sum += 1;
     if (has_auditory)
@@ -175,31 +177,81 @@ function containsAtMostOnePrime(trial) {
     let visprime = trial.visual_prime && trial.visual_prime.length > 0;
     let audprime = trial.auditory_prime && trial.auditory_prime.length > 0;
     if (visprime) {
-        sum++;
+        sum += 1;
     }
     if (audprime) {
-        sum++;
+        sum += 1;
     }
     return sum <= 1;
 }
 
-function validateStimuli() {
-    TEST_ITEMS.forEach((titem) => {
+/**
+ * Validates a list of stimuli.
+ *
+ * The list_name parameters is mostly used to ease the lookup of an invalid
+ * items. The name is used together with the item id to print the violating
+ * items.
+ *
+ * @param {[{}]} trials A list with trial parameters
+ * @param {string} list_name The name of the list.
+ *
+ * @return {boolean} returns true when no errors are found, false otherwise
+ */
+function validateStimuli(trials, list_name) {
+    let success = true;
+    trials.forEach((trial) => {
 
-        let listname = timem.list_name;
-        let stimuli = titem.table;
+        let stim_string =
+            `The stimulus with id "${trial.id}" in list "${list_name} "`;
 
-        stimuli.forEach((trial) => {
-
-            let stim_string =
-                `The stimulus with id "${trial.id}" in list "${listname} "`;
-
-            if (!containsOneTarget(trial)) {
-                console.error(stim_string + "does not contain precisely 1 target.")
-            }
-            if (!containsAtMostOnePrime(trial)) {
-                console.error(stim_string + "does not contain at most 1 prime.")
-            }
-        });
+        if (!containsOneTarget(trial)) {
+            console.error(stim_string + "does not contain precisely 1 target.");
+            success = false;
+        }
+        if (!containsAtMostOnePrime(trial)) {
+            console.error(stim_string + "does not contain at most 1 prime.");
+            success = false;
+        }
     });
+    return success;
+}
+
+function validateAllStimuli() {
+    let success = true;
+    if (!validateStimuli(PRACTICE_LIST, "practice items")) {
+        success = false;
+    }
+    for (let i = 0; i < TEST_ITEMS.length; i++) {
+        let item = TEST_ITEMS[i];
+        if (!validateStimuli(item.table, item.list_name))
+            success = false;
+    }
+    return success;
+}
+
+/**
+ * Extracts all auditory stimuli from the trials.
+ *
+ * This function makes it somewhat easy to preload the auditory stimuli
+ *
+ * @return {string[]}
+ */
+function gatherAudioStimuli() {
+
+    let audio_stimuli = [];
+
+    let push_stimulus = function(trial) {
+        if (typeof trial.auditory_target === "string") {
+            audio_stimuli.push(trial.auditory_prime);
+        }
+        if (typeof trial.auditory_prime === "string") {
+            audio_stimuli.push(trial.auditory_target);
+        }
+    }
+    PRACTICE_LIST.forEach(push_stimulus);
+    TEST_ITEMS.forEach((test_item) => {
+        let trials = test_item.table;
+        trials.forEach(push_stimulus);
+    });
+    return audio_stimuli;
 }

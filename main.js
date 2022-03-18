@@ -174,6 +174,8 @@ function getNonWordKey()
 
 function initExperiment(stimuli) {
 
+    validateAllStimuli();
+
     console.log("The selected list is %s", stimuli.list_name);
     trial_procedure.timeline_variables = uil.randomization.randomizeStimuli(
         stimuli.table,
