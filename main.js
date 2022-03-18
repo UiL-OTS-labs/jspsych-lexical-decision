@@ -1,3 +1,8 @@
+/*
+ * This file creates and starts the jsPsych timeline.
+ * The sub parts/trials that represent the basic building blocks of the lexical
+ * decision are in the file ld_trials.js.
+ */
 
 let jsPsych = initJsPsych(
     {
@@ -69,137 +74,82 @@ let end_screen = {
     trial_duration: DEBRIEF_MESSAGE_DURATION
 };
 
-let present_fixation = {
-    type: jsPsychHtmlKeyboardResponse,
-    stimulus: '<span style="font-size:40px;">+</span>',
-    choices: jsPsych.NO_KEYS,
-    trial_duration: FIXCROSS_DURATION
-};
 
-var present_prime_mask = {
-    type: jsPsychHtmlKeyboardResponse,
-    stimulus: function(){ 
-        return "<p class='stimulus'>" + jsPsych.timelineVariable('pmask', true) + "</p>";
-    },
-    choices: jsPsych.NO_KEYS,
-    trial_duration: PRIME_MASK_DURATION,
-    post_trial_gap: 0,
-    prompt: "",
-    data: { useful_data_flag: false }
-};
-
-let present_prime = {
-    type: jsPsychHtmlKeyboardResponse,
-    stimulus: function(){
-        return "<p class='stimulus'>" + 
-               jsPsych.timelineVariable('prime', true) + "</p>";
-    },
-    choices: jsPsych.NO_KEYS,
-    trial_duration: PRIME_DURATION,
-    post_trial_gap: PRIME_GAP_DURATION
-};
-
-let present_word = {
-    type: jsPsychAudioKeyboardResponse,
-    stimulus: jsPsych.timelineVariable('wordfn'), //this may nee inline func
-    choices: function () {
-        return [getWordKey(), getNonWordKey()];
-    },
-    prompt: "",
-    trial_ends_after_audio: false,
-    trial_duration: RESPONSE_TIMEOUT_DURATION,
-    response_ends_trial: true,
-    post_trial_gap: DEFAULT_ITI,
-    on_finish: function(data){
-
-        let word_key = getWordKey();
-        let answer;
-        let correct;
-        let pressed_key = null;
-
-        if (data.response !== null) {
-            pressed_key = data.response.toUpperCase();
-        }
-
-        // Add "static" information to output
-        data.condition = jsPsych.timelineVariable('item_type');
-        data.word = jsPsych.timelineVariable('word');
-        data.word_file = jsPsych.timelineVariable('wordfn');
-        data.prime = jsPsych.timelineVariable('prime');
-        data.prime_mask = jsPsych.timelineVariable('pmask');
-        data.id = jsPsych.timelineVariable('id');
-        data.expected_answer = jsPsych.timelineVariable('expected_answer');
-        data.useful_data_flag = true;
-
-        answer = pressed_key === word_key ? 1 : 0;
-        correct = answer === data.expected_answer;
-
-        // Add dynamic info to output.
-        data.pressed_key = pressed_key;
-        data.answer = answer;
-        data.correct = correct;
-        data.integer_correct = data.correct ? 1 : 0;
-        data.pressed_key = pressed_key;
-        data.yes_key = yes_key;
-        data.no_key = no_key;
+let maybe_forward_mask = {
+    timeline : [forward_mask],
+    conditional_function : function () {
+        let tvar = jsPsych.timelineVariable('forward_mask');
+        return typeof tvar === "string" && tvar.length > 0;
     }
-};
+}
 
-let present_feedback = {
-    type: jsPsychHtmlKeyboardResponse,
-    stimulus: function() {
-        let feedback_text = '<span style="color:red;font-size:30px;">Incorrect</span>';
-        let last_resp_acc = jsPsych.data.getLastTrialData().values()[0].correct;
-        if (last_resp_acc === true) {
-            feedback_text = '<span style="color:green;font-size:30px;">Correct!</span>';
-        }
-        return feedback_text;
-    },
-    choices: jsPsych.NO_KEYS,
-    trial_duration: FEEDBACK_DURATION
-};
+let maybe_visual_prime = {
+    timeline : [visual_prime],
+    conditional_function : function () {
+        let tvar = jsPsych.timelineVariable('visual_prime');
+        return typeof tvar === "string" && tvar.length > 0;
+    }
+}
+
+let maybe_auditory_prime = {
+    timeline : [auditory_prime],
+    conditional_function : function () {
+        let tvar = jsPsych.timelineVariable('auditory_prime');
+        return typeof tvar === "string" && tvar.length > 0;
+    }
+}
+
+let maybe_backward_mask = {
+    timeline : [backward_mask],
+    conditional_function : function () {
+        let tvar = jsPsych.timelineVariable('backward_mask');
+        return typeof tvar === "string" && tvar.length > 0;
+    }
+}
+
+let maybe_visual_target = {
+    timeline : [visual_target],
+    conditional_function : function () {
+        let tvar = jsPsych.timelineVariable('visual_target');
+        return typeof tvar === "string" && tvar.length > 0;
+    }
+}
+
+let maybe_auditory_target = {
+    timeline : [auditory_target],
+    conditional_function : function () {
+        let tvar = jsPsych.timelineVariable('auditory_target');
+        return typeof tvar === "string" && tvar.length > 0;
+    }
+}
+
+let trial_timeline = [
+    present_fixation,
+    maybe_forward_mask,
+    maybe_visual_prime,
+    maybe_auditory_prime,
+    maybe_backward_mask,
+    maybe_visual_target,
+    maybe_auditory_target
+];
 
 // (timeline) procedures //////////////////////////////////////////////////////////
 
 let practice_procedure = {
-    timeline:[
-        present_fixation,
-        present_prime_mask,
-        present_prime,
-        present_word,
-        present_feedback
-    ],
+    timeline: [...trial_timeline, present_feedback],
     timeline_variables: getPracticeItems().table,
     randomize_order: false,
 };
 
-let trial_procedure_pseudorandom = {
-    timeline:[
-        present_fixation,
-        present_prime_mask,
-        present_prime,
-        present_word,
-    ],
-    timeline_variables: null,
-    randomize_order: false // this should be false if uil randomization is used...
+let trial_procedure = {
+    timeline: trial_timeline,
+    timeline_variables: null
 };
-
-let trial_procedure_random = {
-    timeline:[
-        present_fixation,
-        present_prime_mask,
-        present_prime,
-        present_word
-    ],
-    timeline_variables: null,
-    randomize_order: true // this should be true if you want jsPsych's randomization
-};
-
 
 // regular JS functions
 
 /**
- * Gets the key which pp use to respond it's a word.
+ * Gets the key which pp use to respond it IS a word.
  * @return {string|*}
  */
 function getWordKey()
@@ -211,7 +161,7 @@ function getWordKey()
 }
 
 /**
- * Gets the key which pp use to respond it not a word.
+ * Gets the key which pp use to respond it is NOT a word.
  * @return {string|*}
  */
 function getNonWordKey()
@@ -224,13 +174,14 @@ function getNonWordKey()
 
 function initExperiment(stimuli) {
 
+    validateAllStimuli();
+
     console.log("The selected list is %s", stimuli.list_name);
-    trial_procedure_pseudorandom.timeline = uil.randomization.randomizeStimuli(
+    trial_procedure.timeline_variables = uil.randomization.randomizeStimuli(
         stimuli.table,
         MAX_SUCCEEDING_ITEMS_OF_TYPE,
         'item_type'
     );
-    trial_procedure_random.timeline_variables = stimuli.table;
 
     ////////////////////////// media preloading ///////////////////////////////////////
     
@@ -240,9 +191,9 @@ function initExperiment(stimuli) {
     var practice_audio = [];
     let practice_items = getPracticeItems().table; 
     
-    for (var i=0; i< practice_items.length; i++) {
+    for (let i=0; i< practice_items.length; i++) {
         practice_audio.push(practice_items[i].wordfn);
-    };
+    }
 
     // test audio list
     var test_audio = []; // the same...
@@ -250,23 +201,15 @@ function initExperiment(stimuli) {
     
     for (var i=0; i< test_items.length; i++) {
         test_audio.push(test_items[i].wordfn);
-    };
+    }
 
-    // experiment logic vars
-    var handpref = undefined;
-
-
-    // Data one would like to add to __all__ trials, according to:
-    // https://www.jspsych.org/overview/data/
-    
+    // Data added to the output of all trials.
     let subject_id = jsPsych.randomization.randomID(8);
     let list_name = stimuli.list_name;
-
     jsPsych.data.addProperties({
         subject: subject_id,
         list: list_name,
     });
-
 
     //////////////// timeline /////////////////////////////////
 
@@ -303,11 +246,7 @@ function initExperiment(stimuli) {
     // and a new 'prepare for action' flow
     timeline.push(participant_keyboard_control_start);
 
-    // NOTE options below! comment/uncomment for regular vs restrained randomization
-    // true randomness is better for the current template's amount of items...
-
-    // timeline.push(trial_procedure_pseudorandom); // don't do this with little stimuli?
-    timeline.push(trial_procedure_random);
+    timeline.push(trial_procedure);
     
     timeline.push(end_screen);
 
