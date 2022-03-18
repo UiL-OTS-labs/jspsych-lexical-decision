@@ -258,16 +258,16 @@ function validateAllStimuli() {
  *
  * @return {string[]}
  */
-function gatherAudioStimuli() {
+function getAudioStimuli() {
 
     let audio_stimuli = [];
 
     let push_stimulus = function(trial) {
         if (typeof trial.auditory_target === "string") {
-            audio_stimuli.push(trial.auditory_prime);
+            audio_stimuli.push(trial.auditory_target);
         }
         if (typeof trial.auditory_prime === "string") {
-            audio_stimuli.push(trial.auditory_target);
+            audio_stimuli.push(trial.auditory_prime);
         }
     }
     PRACTICE_LIST.forEach(push_stimulus);

@@ -26,6 +26,21 @@ let start_screen = {
     response_ends_trial: true
 };
 
+let preload_audio = {
+    type : jsPsychPreload,
+    message : PRELOAD_MSG,
+    audio : [...getAudioStimuli(), AUDIO_TEST_STIMULUS]
+};
+
+let maybe_preload_audio = {
+
+    timeline : [preload_audio],
+
+    conditional_function : function () {
+        return preload_audio.audio.length > 0;
+    }
+}
+
 let instruction_screen_practice = {
     type: jsPsychHtmlButtonResponse,
     stimulus: function(){
@@ -183,26 +198,6 @@ function initExperiment(stimuli) {
         'item_type'
     );
 
-    ////////////////////////// media preloading ///////////////////////////////////////
-    
-    var beep_audio = ['./sounds/beep.mp3'];
-    
-    // create list of all audio files for preloading
-    var practice_audio = [];
-    let practice_items = getPracticeItems().table; 
-    
-    for (let i=0; i< practice_items.length; i++) {
-        practice_audio.push(practice_items[i].wordfn);
-    }
-
-    // test audio list
-    var test_audio = []; // the same...
-    let test_items = stimuli.table;
-    
-    for (var i=0; i< test_items.length; i++) {
-        test_audio.push(test_items[i].wordfn);
-    }
-
     // Data added to the output of all trials.
     let subject_id = jsPsych.randomization.randomID(8);
     let list_name = stimuli.list_name;
@@ -217,6 +212,8 @@ function initExperiment(stimuli) {
 
     // it's best practice to have *mouse click* user I/O first
     timeline.push(start_screen);
+
+    timeline.push(maybe_preload_audio);
     
     // Informed consent (consent.js)
     timeline.push(consent_procedure);  

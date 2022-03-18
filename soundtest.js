@@ -18,7 +18,7 @@ let test_audio_looped = {
         [
             {
                 type: jsPsychAudioButtonResponse,
-                stimulus: './sounds/beep.mp3',
+                stimulus: AUDIO_TEST_STIMULUS,
                 choices: ['Play Again', 'Continue'],
                 prompt: function(){
                     return "<div class='instruction' >" +
