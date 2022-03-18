@@ -47,7 +47,7 @@ let visual_prime = {
  */
 let auditory_prime = {
     type : jsPsychAudioKeyboardResponse,
-    stimulus : function() { return jsPsych.timelineVariable("auditory_prime");},
+    stimulus : function() {jsPsych.timelineVariable("auditory_prime")},
     choices : "NO_KEYS",
     trial_duration : PRIME_DURATION,
     post_trial_gap : PRIME_GAP_DURATION
@@ -82,8 +82,7 @@ function createChoicesArray() {
  */
 function saveTargetData(data) {
     let word_key = getWordKey();
-    let answer;
-    let correct;
+    let answer = null;
     let pressed_key = null;
 
     if (data.response !== null) {
@@ -106,12 +105,11 @@ function saveTargetData(data) {
     // compute correctness, pressed_key could be null in case of no response.
     if (typeof pressed_key === 'string') {
         answer = pressed_key === word_key ? 1 : 0;
-        correct = answer === data.expected_answer;
     }
 
     // Add dynamic info to output.
     data.answer = answer;
-    data.correct = correct;
+    data.correct = answer === data.expected_answer;
     // Some find an integer representation of a boolean handy for analysis.
     data.integer_correct = data.correct ? 1 : 0;
     data.pressed_key = pressed_key;
@@ -163,9 +161,9 @@ let present_feedback = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: function() {
         let incorrect_feedback_text =
-            `<span style="color:red;font-size:30px;">${INCORRECT_TEXT}</span>`;
+            `<span class="feedback_incorrect">${INCORRECT_TEXT}</span>`;
         let correct_feedback_text =
-            `<span style="color:green;font-size:30px;">${CORRECT_TEXT}</span>`;
+            `<span class="feedback_correct">${CORRECT_TEXT}</span>`;
         let last_resp_acc = jsPsych.data.getLastTrialData().values()[0].correct;
         if (last_resp_acc === true) {
             return correct_feedback_text

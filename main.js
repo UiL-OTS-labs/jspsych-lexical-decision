@@ -136,7 +136,7 @@ let trial_timeline = [
 // (timeline) procedures //////////////////////////////////////////////////////////
 
 let practice_procedure = {
-    timeline:[].concat(trial_timeline, [present_feedback]),
+    timeline: [...trial_timeline, present_feedback],
     timeline_variables: getPracticeItems().table,
     randomize_order: false,
 };
