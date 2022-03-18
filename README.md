@@ -7,7 +7,7 @@ This experiment is based on the previous experiments of the Uil-OTS labs:
 
 - **jspsych-vislexdec**       lexical decision (visual target stimulus)
 - **jspsych-vislexdec-vp**    lexical decision (visual target stimulus) + visual prime
-- **jspsych-vislexdec-vp-vm** lexcial decision (visual target stimulus) + visual masked prime
+- **jspsych-vislexdec-vp-vm** lexical decision (visual target stimulus) + visual masked prime
 - **jspsych-audlexdec**       lexical decision (auditory target stimulus)
 - **jspsych-audlexdec-ap**    lexical decision (auditory target stimulus) + auditory prime
 - **jspsych-audlexdec-vp**    lexical decision (auditory target stimulus) + visual prime
@@ -24,9 +24,9 @@ for some context and scope.
 
 
 # Task Description
-Auditory or visual lexcial decision task: the participant first sees a fixation
-cross, this marks the onset of an trial. Then optionally an auditory or visual
-prime is presented. The visual prime may be subsequently masked. Finally the
+Auditory or visual lexical decision task: the participant first sees a fixation
+cross, this marks the onset of a trial. Then optionally an auditory or visual
+prime is presented. The visual prime may be subsequently masked. Finally, the
 participants hear or see a real or non-existing word (non-word). The task is
 to respond as quickly as possible and indicate whether the heard word is a real
 word or not.
@@ -60,7 +60,7 @@ In the file `globals.js` is a variable:
 ```javascript
 const ACCESS_KEY = '00000000-0000-0000-0000-000000000000';
 ```
-Before uploading your experimentto the UiL-OTS data server, you will need to
+Before uploading your experiment to the UiL-OTS data server, you will need to
 change this to the access key that you obtained when your experiment was
 approved. For elaborate info see `globals.js`.
 
@@ -152,7 +152,8 @@ Essential output for the _'true experimental'_ purpose in this template are:
 - Reaction Time (RT) of the keyboard response in the decision phase
 - Correctness of the keyboard response in the decision phase
 
-The crucial trial/sub-trial phase (decision phase) output may look similar to this:
+The crucial trial/sub-trial phase (decision phase) output may look similar to
+this:
 
 ```json
 {
@@ -180,35 +181,36 @@ The crucial trial/sub-trial phase (decision phase) output may look similar to th
 }
 ```
 
-Some of the columns output variable may be present or absent based on the changes you've made to the experiment, when
-you don't present a prime, it won't be in the output. They have a checkmark in the optional column.
+Some of the output variables may be present or absent based on the
+changes you've made to the experiment, e.g. when you don't present a prime, it
+won't be in the output. They have a checkmark in the conditional column.
 
-| Variable name (key) | optional | Description          | Unit   | Type        | Comments                                            | jsPsych default |
-|---------------------|----------|----------------------|--------|-------------|-----------------------------------------------------|-----------------|
-| rt                  |          | Reaction Time        | ms.    | int         | Reaction time in milliseconds                       | yes             |
-| stimulus            |          | stimulus (html)      |        | string/html | Path to audio file/ or html                         | yes             |
-| response            |          | The pressed button   | letter | string/null | Denotes the key pressed/or absence.                 | yes             |
-| trial_type          |          | What plugin was used |        |             |                                                     | yes             |
-| trial_index         |          | trial_index          | count  | index       | every stimulus is a trial using jspsych             | yes             |
-| time_elapsed        |          | jsPsych time object  | ms     | number      | For instance: 45062                                 | yes             |
-| internal_node_id.   |          | jsPsych node object  |        |             | For instance:"0.0-11.0-1.4"                         | yes             |
-| subject             |          | Subject ID           |        |             | A random string of character or id from dataserver  | no              |
-| list                |          | Stimulus list name.  |        | string      | For instance: list1                                 | no              |
-| id                  |          | ID/code              |        | number      | identifies a stimulus within a list                 | no              |
-| condition           |          | Condition            |        | string      | See ```stimuli.js```; the condition of this trial   | no              |
-| word                |          | Decision phase item  |        | string      | See ```stimuli.js``` the word in plain utf8 text    | no              |
-| expected_answer     |          | 1 word or 0 non word |        | int         | Signifies what would be the correct response        | no              |
-| forward_mask        | ✓        | the forward mask     |        | string      | The presented forward mask                          | no              |
-| visual_prime        | ✓        | visual prime         |        | text        | A prime that is displayed on screen                 | no              |
-| auditory_prime      | ✓        | auditory prime       |        | string/path | An audible prime                                    | no              |
-| backward_mask       | ✓        | backward_mask        |        | string      | The presented backward mask                         | no              |
-| auditory_target     | ✓        | Target word          |        | string/path | The sound file that plays the target                | no              |
-| visual_target       | ✓        | Target word          |        | string      | The target word presented on screen                 | no              |
-| useful_data_flag    |          | Filter flag          |        | boolean     | may be used to filter useful data during analysis   | no              |
-| answer              |          | The provided answer  |        | int         | 1 or 0 if the participand responsed word or nonword | no              |
-| correct             |          | Scoring result       |        | Boolean     | 'true or false' score of response                   | no              |
-| integer_correct     |          | Scoring result       |        | integer     | 1 or 0 for correct or incorrect                     | no              |
-| pressed key         |          | the key pressed      |        | string/null | An uppercased letter for true or flase.             | no              |
+| Variable name (key) | conditional | Description          | Unit   | Type        | Comments                                              | jsPsych default |
+|---------------------|-------------|----------------------|--------|-------------|-------------------------------------------------------|-----------------|
+| rt                  |             | Reaction Time        | ms.    | int         | Reaction time in milliseconds                         | yes             |
+| stimulus            |             | stimulus (html)      |        | string/html | Path to audio file/ or html                           | yes             |
+| response            |             | The pressed button   | letter | string/null | Denotes the key pressed/or absence.                   | yes             |
+| trial_type          |             | What plugin was used |        |             | "html-keyboard-response" or "audio-keyboard-response" | yes             |
+| trial_index         |             | trial_index          | count  | index       | every stimulus is a trial using jspsych               | yes             |
+| time_elapsed        |             | jsPsych time object  | ms     | number      | For instance: 45062                                   | yes             |
+| internal_node_id.   |             | jsPsych node object  |        |             | For instance:"0.0-11.0-1.4"                           | yes             |
+| subject             |             | Subject ID           |        |             | A random string of character or id from dataserver    | no              |
+| list                |             | Stimulus list name.  |        | string      | For instance: list1                                   | no              |
+| id                  |             | ID/code              |        | number      | identifies a stimulus within a list                   | no              |
+| condition           |             | Condition            |        | string      | See ```stimuli.js```; the condition of this trial     | no              |
+| word                |             | Decision phase item  |        | string      | See ```stimuli.js``` the word in plain utf8 text      | no              |
+| expected_answer     |             | 1 word or 0 non word |        | int         | Signifies what would be the correct response          | no              |
+| forward_mask        | ✓           | the forward mask     |        | string      | The presented forward mask                            | no              |
+| visual_prime        | ✓           | visual prime         |        | text        | A prime that is displayed on screen                   | no              |
+| auditory_prime      | ✓           | auditory prime       |        | string/path | An audible prime                                      | no              |
+| backward_mask       | ✓           | backward_mask        |        | string      | The presented backward mask                           | no              |
+| auditory_target     | ✓           | Target word          |        | string/path | The sound file that plays the target                  | no              |
+| visual_target       | ✓           | Target word          |        | string      | The target word presented on screen                   | no              |
+| useful_data_flag    |             | Filter flag          |        | boolean     | may be used to filter useful data during analysis     | no              |
+| answer              |             | The provided answer  |        | int         | 1 or 0 if the participant responsed word or non-word  | no              |
+| correct             |             | Scoring result       |        | Boolean     | 'true or false' score of response                     | no              |
+| integer_correct     |             | Scoring result       |        | integer     | 1 or 0 for correct or incorrect                       | no              |
+| pressed key         |             | the key pressed      |        | string/null | An upper cased letter for true or false.              | no              |
 
 Good luck, happy experimenting!
 
