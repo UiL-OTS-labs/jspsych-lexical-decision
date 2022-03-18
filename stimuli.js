@@ -186,6 +186,24 @@ function containsAtMostOnePrime(trial) {
 }
 
 /**
+ * Checks that when a mask is present there is also a visual prime.
+ *
+ * As it makes no sense to mask a prime that is not presented. And it
+ * also makes no sense to visually mask an auditory prime.
+ *
+ * @param {object} trial
+ * @return boolean.
+ */
+function masksVisualPrime(trial) {
+    if ((trial.forward_mask && trial.forward_mask.length > 0) ||
+        (trial.backward_mask && trial.backward_mask.length > 0)) {
+        if (!trial.visual_prime || trial.visual_prime.length === 0)
+            return false;
+    }
+    return true;
+}
+
+/**
  * Validates a list of stimuli.
  *
  * The list_name parameters is mostly used to ease the lookup of an invalid
@@ -210,6 +228,10 @@ function validateStimuli(trials, list_name) {
         }
         if (!containsAtMostOnePrime(trial)) {
             console.error(stim_string + "does not contain at most 1 prime.");
+            success = false;
+        }
+        if (!masksVisualPrime(trial)) {
+            console.error(stim_string + "presents masks while no prime is present.");
             success = false;
         }
     });
