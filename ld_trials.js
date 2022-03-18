@@ -47,7 +47,7 @@ let visual_prime = {
  */
 let auditory_prime = {
     type : jsPsychAudioKeyboardResponse,
-    stimulus : function() {jsPsych.timelineVariable("auditory_prime")},
+    stimulus : function() {return jsPsych.timelineVariable("auditory_prime");},
     choices : "NO_KEYS",
     trial_duration : PRIME_DURATION,
     post_trial_gap : PRIME_GAP_DURATION
