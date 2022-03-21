@@ -110,7 +110,7 @@ let if_validated_key_left_feedback_needed = {
         if (typeof data.rt === "number") {
             data.rt = Math.round(data.rt);
         }
-    };
+    }
 };
 
 let if_key_left_node = {
@@ -165,7 +165,7 @@ let if_validated_key_right_feedback_needed = {
                "<BR><BR>Try again, please...</p>";
     },
     choices: [OK_BUTTON_TEXT],
-    on_finish : fuction(data) {
+    on_finish : function(data) {
         if (typeof data.rt === "number") {
             data.rt = Math.round(data.rt);
         }
