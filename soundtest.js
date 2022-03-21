@@ -37,3 +37,11 @@ let test_audio_looped = {
         data.audio_checked = true;
     }
 };
+
+let maybe_test_audio = {
+    timeline : [test_audio_looped],
+    conditional_function : function () {
+        let use_audio = experimentUsesAudio();
+        return use_audio;
+    }
+};

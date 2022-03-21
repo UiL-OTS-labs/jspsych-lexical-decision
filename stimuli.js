@@ -277,3 +277,12 @@ function getAudioStimuli() {
     });
     return audio_stimuli;
 }
+
+/**
+ * Returns whether this experiment has auditory stimuli
+ *
+ * @return {boolean} true when this experiment contains audio false otherwise
+ */
+function experimentUsesAudio() {
+    return getAudioStimuli().length > 0;
+}

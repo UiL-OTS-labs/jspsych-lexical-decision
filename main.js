@@ -229,7 +229,7 @@ function initExperiment(stimuli) {
     timeline.push(keyboard_set_key_right_procedure);
 
     // test/set audio level (sountest.js)
-    timeline.push(test_audio_looped);
+    timeline.push(maybe_test_audio);
 
     // task instruction (with button)
     timeline.push(instruction_screen_practice);
