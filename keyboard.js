@@ -58,6 +58,9 @@ let select_keyboard_layout = {
         let keyboard_chosen = KEYBOARD_CHOICES[button_number];
         data.keyboard = keyboard_chosen;
         chosen_keyboard = keyboard_chosen;
+        if (typeof data.rt === "number") {
+            data.rt = Math.round(data.rt);
+        }
     }
 };
 
@@ -87,6 +90,9 @@ let test_keyboard_key_left = {
             test_keyboard_key_left.pressed === expected_key_press;
         data.key_confirmed = test_keyboard_key_left.confirmed;
         data.pressed = test_keyboard_key_left.pressed;
+        if (typeof data.rt === "number") {
+            data.rt = Math.round(data.rt);
+        }
     }
 };
 
@@ -99,7 +105,12 @@ let if_validated_key_left_feedback_needed = {
                "You pressed: " + chosen_key +
                "<BR><BR>Try again, please...</p>";
     },
-    choices: [OK_BUTTON_TEXT]
+    choices: [OK_BUTTON_TEXT],
+    on_finish : function(data) {
+        if (typeof data.rt === "number") {
+            data.rt = Math.round(data.rt);
+        }
+    };
 };
 
 let if_key_left_node = {
@@ -136,7 +147,10 @@ let test_keyboard_key_right = {
             test_keyboard_key_right.pressed === expected_key_press;
         data.key_confirmed = test_keyboard_key_right.confirmed;
         data.pressed = test_keyboard_key_right.pressed;
-
+        
+        if (typeof data.rt === "number") {
+            data.rt = Math.round(data.rt);
+        }
     }
 };
 
@@ -150,7 +164,12 @@ let if_validated_key_right_feedback_needed = {
                "You pressed: " + chosen_key +
                "<BR><BR>Try again, please...</p>";
     },
-    choices: [OK_BUTTON_TEXT]
+    choices: [OK_BUTTON_TEXT],
+    on_finish : fuction(data) {
+        if (typeof data.rt === "number") {
+            data.rt = Math.round(data.rt);
+        }
+    }
 };
 
 let if_key_right_node = {

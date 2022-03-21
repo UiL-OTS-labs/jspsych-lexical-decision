@@ -10,7 +10,12 @@ let present_fixation = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: '<span style="font-size:40px;">+</span>',
     choices: "NO_KEYS",
-    trial_duration: FIXCROSS_DURATION
+    trial_duration: FIXCROSS_DURATION,
+    on_finish: function(data) {
+        if (typeof data.rt == "number") {
+            data.rt = Math.round(data.rt);
+        }
+    }
 };
 
 /*
@@ -25,7 +30,12 @@ let forward_mask = {
     },
     choices: "NO_KEYS",
     trial_duration: MASK_DURATION,
-    data: { useful_data_flag: false }
+    data: { useful_data_flag: false },
+    on_finish(data) {
+        if (typeof data.rt == "number") {
+            data.rt = Math.round(data.rt);
+        }
+    }
 };
 
 /*
@@ -39,7 +49,12 @@ let visual_prime = {
     },
     choices: "NO_KEYS",
     trial_duration: PRIME_DURATION,
-    post_trial_gap: PRIME_GAP_DURATION
+    post_trial_gap: PRIME_GAP_DURATION,
+    on_finish(data) {
+        if (typeof data.rt == "number") {
+            data.rt = Math.round(data.rt);
+        }
+    }
 };
 
 /*
@@ -50,7 +65,12 @@ let auditory_prime = {
     stimulus : function() {return jsPsych.timelineVariable("auditory_prime");},
     choices : "NO_KEYS",
     trial_duration : PRIME_DURATION,
-    post_trial_gap : PRIME_GAP_DURATION
+    post_trial_gap : PRIME_GAP_DURATION,
+    on_finish(data) {
+        if (typeof data.rt == "number") {
+            data.rt = Math.round(data.rt);
+        }
+    }
 }
 
 /*
@@ -65,7 +85,12 @@ let backward_mask = {
     },
     choices: "NO_KEYS",
     trial_duration: MASK_DURATION,
-    data: { useful_data_flag: false }
+    data: { useful_data_flag: false },
+    on_finish(data) {
+        if (typeof data.rt == "number") {
+            data.rt = Math.round(data.rt);
+        }
+    }
 }
 
 /**
@@ -113,6 +138,10 @@ function saveTargetData(data) {
     // Some find an integer representation of a boolean handy for analysis.
     data.integer_correct = data.correct ? 1 : 0;
     data.pressed_key = pressed_key;
+    
+    if (typeof data.rt == "number") {
+        data.rt = Math.round(data.rt);
+    }
 }
 
 /*
@@ -171,5 +200,10 @@ let present_feedback = {
         return incorrect_feedback_text;
     },
     choices: "NO_KEYS",
-    trial_duration: FEEDBACK_DURATION
+    trial_duration: FEEDBACK_DURATION,
+    on_finish(data) {
+        if (typeof data.rt == "number") {
+            data.rt = Math.round(data.rt);
+        }
+    }
 };

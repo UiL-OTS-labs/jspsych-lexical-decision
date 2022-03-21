@@ -159,8 +159,13 @@ let consent_block = {
     ],
     on_finish: function(data){
         let consent_choices = data.response.consent;
-        let consent_statement = consent_choices.find(element => {return element === CONSENT_STATEMENT});
+        let consent_statement = consent_choices.find(
+            element => {return element === CONSENT_STATEMENT}
+        );
         g_consent_given = consent_statement === CONSENT_STATEMENT;
+        if (typeof data.rt === 'number') {
+            data.rt = Math.round(data.rt);
+        }
     }
 };
 
@@ -170,6 +175,9 @@ let no_consent_end_screen = {
     choices: [],
     trial_duration: DEBRIEF_MESSAGE_NO_CONSENT_DURATION,
     on_finish: function (data){
+        if (typeof data.rt === 'number') {
+            data.rt = Math.round(data.rt);
+        }
         jsPsych.endExperiment()
     }
 };

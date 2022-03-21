@@ -177,6 +177,9 @@ let survey_multi_choice_block = {
         let response = data.response;
         participant_info.gender = GENDER_OPTION_MAP[response.Sex];
         participant_info.hand_pref = HAND_OPTIONS_MAP[response.HandPreference];
+        if (typeof data.rt === "number") {
+            data.rt = Math.round(data.rt);
+        }
     }
 };
 
@@ -185,6 +188,11 @@ let survey_multi_html_block = {
     type: jsPsychSurveyHtmlForm,
     preamble: PREPARE_FOR_SURVEY,
     html: MULTI_CHOICE_HTML,
+    on_finish : function(data) {
+        if (typeof data.rt === "number") {
+            data.rt = Math.round(data.rt);
+        }
+    }
 };
 
 let survey_review_survey_data = {
@@ -229,6 +237,9 @@ let survey_review_survey_data = {
         // Repeat the survey if yes (0) was not pressed.
         // this may give multiple entries, up to the researcher to filter out
         repeat_survey = data.response !== 0;
+        if (typeof data.rt === "number") {
+            data.rt = Math.round(data.rt);
+        }
     }
 };
 

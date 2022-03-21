@@ -35,6 +35,9 @@ let test_audio_looped = {
     },
     on_finish: function(data) {
         data.audio_checked = true;
+        if (typeof data.rt === "number") {
+            data.rt = Math.round(data.rt);
+        }
     }
 };
 

@@ -23,7 +23,12 @@ let start_screen = {
                "<p>" + GENERIC_CHECK + "</p></div>";
     },
     choices: [OK_BUTTON_TEXT],
-    response_ends_trial: true
+    response_ends_trial: true,
+    on_finish : function(data) {
+        if (typeof data.rt === "number") {
+            data.rt = Math.round(data.rt);
+        }
+    }
 };
 
 let preload_audio = {
@@ -33,7 +38,6 @@ let preload_audio = {
 };
 
 let maybe_preload_audio = {
-
     timeline : [preload_audio],
     conditional_function : experimentUsesAudio
 }
@@ -49,6 +53,11 @@ let instruction_screen_practice = {
     },
     choices: [OK_BUTTON_TEXT],
     response_ends_trial: true,
+    on_finish : function(data) {
+        if (typeof data.rt === "number") {
+            data.rt = Math.round(data.rt);
+        }
+    }
 };
 
 let participant_keyboard_control_start = {
@@ -66,6 +75,11 @@ let participant_keyboard_control_start = {
     //trial_duration: 10000,
     trial_ends_after_response: true,
     post_trial_gap: 300,
+    on_finish : function(data) {
+        if (typeof data.rt === "number") {
+            data.rt = Math.round(data.rt);
+        }
+    }
 };
 
 let well_done_screen = {
@@ -76,14 +90,24 @@ let well_done_screen = {
     },
     choices: [OK_BUTTON_TEXT],
     response_ends_trial: true,
-    data: { useful_data_flag: false }
+    data: { useful_data_flag: false },
+    on_finish : function(data) {
+        if (typeof data.rt === "number") {
+            data.rt = Math.round(data.rt);
+        }
+    }
 };
 
 let end_screen = {
     type: jsPsychHtmlButtonResponse,
     stimulus: DEBRIEF_MESSAGE,
     choices: [],
-    trial_duration: DEBRIEF_MESSAGE_DURATION
+    trial_duration: DEBRIEF_MESSAGE_DURATION,
+    on_finish : function(data) {
+        if (typeof data.rt === "number") {
+            data.rt = Math.round(data.rt);
+        }
+    }
 };
 
 
