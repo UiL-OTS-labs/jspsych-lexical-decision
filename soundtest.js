@@ -40,8 +40,5 @@ let test_audio_looped = {
 
 let maybe_test_audio = {
     timeline : [test_audio_looped],
-    conditional_function : function () {
-        let use_audio = experimentUsesAudio();
-        return use_audio;
-    }
+    conditional_function : experimentUsesAudio
 };

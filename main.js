@@ -35,10 +35,7 @@ let preload_audio = {
 let maybe_preload_audio = {
 
     timeline : [preload_audio],
-
-    conditional_function : function () {
-        return preload_audio.audio.length > 0;
-    }
+    conditional_function : experimentUsesAudio
 }
 
 let instruction_screen_practice = {
