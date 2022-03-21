@@ -258,16 +258,16 @@ function validateAllStimuli() {
  *
  * @return {string[]}
  */
-function gatherAudioStimuli() {
+function getAudioStimuli() {
 
     let audio_stimuli = [];
 
     let push_stimulus = function(trial) {
         if (typeof trial.auditory_target === "string") {
-            audio_stimuli.push(trial.auditory_prime);
+            audio_stimuli.push(trial.auditory_target);
         }
         if (typeof trial.auditory_prime === "string") {
-            audio_stimuli.push(trial.auditory_target);
+            audio_stimuli.push(trial.auditory_prime);
         }
     }
     PRACTICE_LIST.forEach(push_stimulus);
@@ -276,4 +276,13 @@ function gatherAudioStimuli() {
         trials.forEach(push_stimulus);
     });
     return audio_stimuli;
+}
+
+/**
+ * Returns whether this experiment has auditory stimuli
+ *
+ * @return {boolean} true when this experiment contains audio false otherwise
+ */
+function experimentUsesAudio() {
+    return getAudioStimuli().length > 0;
 }

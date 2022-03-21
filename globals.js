@@ -39,3 +39,9 @@ const MIN_HEIGHT = 600;
 // Bail out string for mobiles
 const BAIL_OUT_MOBILE_TEXT = "Please run this experiment on a PC or Laptop.";
 
+// Test stimulus name for the test audio.
+const AUDIO_TEST_STIMULUS = "./sounds/sound_test.mp3";
+
+// message while loading sounds
+const PRELOAD_MSG = "Loading the experiment, please be patient.";
+
