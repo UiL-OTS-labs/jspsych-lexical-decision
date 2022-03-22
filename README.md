@@ -65,7 +65,7 @@ change this to the access key that you obtained when your experiment was
 approved. For elaborate info see `globals.js`.
 
 
-### Adapting stimuli
+## Adapting stimuli
 - Open the file `stimuli.js` in your plain text editor.
 - There is a list, called `LIST_1`:
 
@@ -139,6 +139,33 @@ const LIST_1 = [
 ```
 So this is not as long as one might be scared of ;-).
 
+## In case of using auditory stimuli as prime or target word
+In the boilerplate experiment is a Sound Test stimulus. This sound test is done
+in order for the participant to adjust there sound setting on their pc to
+a comforable sound level. This ensures stimuli are not presented to loud or
+to soft. This "test" is skipped when your stimulus list does not contain
+auditory stimuli.
+
+In the sounds folder there is a stimulus called **"sound_test.mp3"**. The
+boilerplate plays this stimulus. It is an artificial *beep* but at full
+volume, hence louder than your auditory stimuli. When recording stimuli
+we suggest that you also record a stimulus that is going to replace the beep.
+Than the replacement is recorded in a similar fashion as your test stimuli and
+than their sound volume will be roughly equivalent.
+
+If you need to change the name of the stimulus, e.g. to sound_test.wav, you
+need to make the experiment aware of this change. In the file `globals.js` is
+the following variable:
+
+```javascript
+// Test stimulus name for the test audio.
+const AUDIO_TEST_STIMULUS = "./sounds/sound_test.mp3";
+```
+one would alter this to become:
+```javascript
+// Test stimulus name for the test audio.
+const AUDIO_TEST_STIMULUS = "./sounds/sound_test.wav";
+```
 
 # Output
 The data of _all_ (sub) _trial phases_ are logged in the data, but the output
