@@ -45,3 +45,6 @@ const AUDIO_TEST_STIMULUS = "./sounds/sound_test.mp3";
 // message while loading sounds
 const PRELOAD_MSG = "Loading the experiment, please be patient.";
 
+// The duration the last stimulus/debriefing is visible
+const DEBRIEF_MESSAGE_DURATION = 30000;
+
