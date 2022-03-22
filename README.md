@@ -1,6 +1,6 @@
 # jspsych-lexical-decision
-[Lexical Decision](https://en.wikipedia.org/wiki/Lexical_decision_task)
-This boilerplate experiment is designed to run multiple kinds of lexical
+This boilerplate [lexical decision](https://en.wikipedia.org/wiki/Lexical_decision_task)
+experiment is designed to run multiple flavors of lexical
 decision. The lexical decision may be based on an auditory or visual
 stimulus. The target word may be preceded by an optionally masked prime.
 This experiment is based on the previous experiments of the Uil-OTS labs:
@@ -17,11 +17,9 @@ however, it is one experiment capable of running all sub flavors above. The list
 of stimuli will determine what sub flavor will be presented to the subjects of
 this experiment.
 
-
 # Generic documentation
 Please read the [generic documentation](https://github.com/UiL-OTS-labs/jspsych-uil-template-docs)
 for some context and scope.
-
 
 # Task Description
 Auditory or visual lexical decision task: the participant first sees a fixation
@@ -42,9 +40,9 @@ This boilerplate is a short example, and primarily intended to illustrate how
 this experiment works. So for the practice phase you see a lexical decision
 with a forward mask and a visual prime, and the target word is also presented
 on screen. In contrast, in the test phase, there is a backward mask and the
-target is presented as a sound. You could interleave all different flavors if you would want to, however, we
-strongly suggest making one type of trial for all practice and test stimuli.
-
+target is presented as a sound. You could interleave all different flavors if
+you would want to, however, we strongly suggest making one type of trial for all
+practice and test stimuli.
 
 # Getting started
 People _affiliated with our lab_ can use the information
@@ -52,9 +50,7 @@ People _affiliated with our lab_ can use the information
 and expand the "Online experiments using jsPsych" section for details. Please
 follow [this how-to](https://uilots-labs.wp.hum.uu.nl/how-to/online-experimenting/).
 
-
 ## Make your experiment ready for use with the data server
-
 ### Update access key
 In the file `globals.js` is a variable:
 ```javascript
@@ -63,7 +59,6 @@ const ACCESS_KEY = '00000000-0000-0000-0000-000000000000';
 Before uploading your experiment to the UiL-OTS data server, you will need to
 change this to the access key that you obtained when your experiment was
 approved. For elaborate info see `globals.js`.
-
 
 ## Adapting stimuli
 - Open the file `stimuli.js` in your plain text editor.
@@ -79,7 +74,6 @@ approved. For elaborate info see `globals.js`.
   `stimuli.js` file (and its comment sections) a little better.
 - For an example of a Latin square design, please have a look
   [here](https://github.com/UiL-OTS-labs/jspsych-spr-mw).
-
 
 ### Adding stimuli
 In the file stimuli.js, one needs to add stimuli to one or multiple lists.
@@ -140,20 +134,20 @@ const LIST_1 = [
 So this is not as long as one might be scared of ;-).
 
 ## In case of using auditory stimuli as prime or target word
-In the boilerplate experiment is a Sound Test stimulus. This sound test is done
-in order for the participant to adjust there sound setting on their pc to
-a comforable sound level. This ensures stimuli are not presented to loud or
+In the boilerplate experiment is a *soundtest* stimulus. This sound test is done
+in order for the participant to adjust their sound settings on to a comfortable
+sound level. This ensures stimuli are not presented to loud or
 to soft. This "test" is skipped when your stimulus list does not contain
 auditory stimuli.
 
-In the sounds folder there is a stimulus called **"sound_test.mp3"**. The
+In the `sounds` folder there is a stimulus called **"sound_test.mp3"**. The
 boilerplate plays this stimulus. It is an artificial *beep* but at full
 volume, hence louder than your auditory stimuli. When recording stimuli
 we suggest that you also record a stimulus that is going to replace the beep.
-Than the replacement is recorded in a similar fashion as your test stimuli and
-than their sound volume will be roughly equivalent.
+The replacement is recorded in a similar fashion as your test stimuli and
+then their sound volume will be roughly equivalent.
 
-If you need to change the name of the stimulus, e.g. to sound_test.wav, you
+If you need to change the name of the stimulus, e.g. to `sound_test.wav`, you
 need to make the experiment aware of this change. In the file `globals.js` is
 the following variable:
 
@@ -161,7 +155,7 @@ the following variable:
 // Test stimulus name for the test audio.
 const AUDIO_TEST_STIMULUS = "./sounds/sound_test.mp3";
 ```
-one would alter this to become:
+One would alter this to become:
 ```javascript
 // Test stimulus name for the test audio.
 const AUDIO_TEST_STIMULUS = "./sounds/sound_test.wav";
