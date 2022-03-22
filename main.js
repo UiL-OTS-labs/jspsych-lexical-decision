@@ -9,9 +9,6 @@ let jsPsych = initJsPsych(
         exclusions: {
             min_width: MIN_WIDTH,
             min_height: MIN_HEIGHT
-        },
-        on_finish: function() {
-            uil.saveData(ACCESS_KEY);
         }
     }
 );
@@ -107,6 +104,9 @@ let end_screen = {
         if (typeof data.rt === "number") {
             data.rt = Math.round(data.rt);
         }
+    },
+    on_load : function() {
+        uil.saveData(ACCESS_KEY);
     }
 };
 
