@@ -269,14 +269,8 @@ function initExperiment(stimuli) {
     timeline.push(end_screen);
 
     // Start jsPsych when running on a Desktop or Laptop style pc.
-    if (! uil.browser.isMobileOrTablet()) {
-        jsPsych.run(timeline);
-    }
-    else { // or bail out.
-        let paragraph = document.createElement("p")
-        paragraph.innerHTML = BAIL_OUT_MOBILE_TEXT;
-        document.body.appendChild(paragraph);
-    }
+    uil.browser.rejectMobileOrTablet();
+    jsPsych.run(timeline);
 }
 
 
