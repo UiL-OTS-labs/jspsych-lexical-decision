@@ -17,8 +17,8 @@ let test_audio_looped = {
     timeline:
         [
             {
-                type: 'audio-button-response',
-                stimulus: './sounds/beep.mp3',
+                type: jsPsychAudioButtonResponse,
+                stimulus: AUDIO_TEST_STIMULUS,
                 choices: ['Play Again', 'Continue'],
                 prompt: function(){
                     return "<div class='instruction' >" +
@@ -35,5 +35,13 @@ let test_audio_looped = {
     },
     on_finish: function(data) {
         data.audio_checked = true;
+        if (typeof data.rt === "number") {
+            data.rt = Math.round(data.rt);
+        }
     }
+};
+
+let maybe_test_audio = {
+    timeline : [test_audio_looped],
+    conditional_function : experimentUsesAudio
 };

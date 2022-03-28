@@ -144,7 +144,7 @@ const IF_REQUIRED_FEEDBACK_MESSAGE = `
         `
 
 let consent_block = {
-    type: 'survey-multi-select',
+    type: jsPsychSurveyMultiSelect,
     preamble: CONSENT_HTML_STYLE_UU + CONSENT_HTML,
     required_message: IF_REQUIRED_FEEDBACK_MESSAGE,
     questions: [
@@ -158,18 +158,26 @@ let consent_block = {
         }
     ],
     on_finish: function(data){
-        let consent_choices = JSON.parse(data.responses).consent;
-        let consent_statement = consent_choices.find(element => element === CONSENT_STATEMENT);
+        let consent_choices = data.response.consent;
+        let consent_statement = consent_choices.find(
+            element => {return element === CONSENT_STATEMENT}
+        );
         g_consent_given = consent_statement === CONSENT_STATEMENT;
+        if (typeof data.rt === 'number') {
+            data.rt = Math.round(data.rt);
+        }
     }
 };
 
 let no_consent_end_screen = {
-    type: 'html-button-response',
+    type: jsPsychHtmlButtonResponse,
     stimulus: DEBRIEF_MESSAGE_NO_CONSENT,
     choices: [],
     trial_duration: DEBRIEF_MESSAGE_NO_CONSENT_DURATION,
     on_finish: function (data){
+        if (typeof data.rt === 'number') {
+            data.rt = Math.round(data.rt);
+        }
         jsPsych.endExperiment()
     }
 };
