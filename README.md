@@ -3,7 +3,7 @@ This boilerplate [lexical decision](https://en.wikipedia.org/wiki/Lexical_decisi
 experiment is designed to run multiple flavors of lexical
 decision. The lexical decision may be based on an auditory or visual
 stimulus. The target word may be preceded by an optionally masked prime.
-This experiment is based on the previous experiments of the Uil-OTS labs:
+This experiment is based on the previous experiments of the ILS labs:
 
 - **jspsych-vislexdec**       lexical decision (visual target stimulus)
 - **jspsych-vislexdec-vp**    lexical decision (visual target stimulus) + visual prime
