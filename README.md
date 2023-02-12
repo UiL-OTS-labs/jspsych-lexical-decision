@@ -13,7 +13,7 @@ This experiment is based on the previous experiments of the Uil-OTS labs:
 - **jspsych-audlexdec-vp**    lexical decision (auditory target stimulus) + visual prime
 - **jspsych-audlexdec-vp-vm** lexical decision (auditory target stimulus) + visual masked prime
 
-however, it is one experiment capable of running all sub flavors above. The list
+However, it is one experiment capable of running all sub flavors above. The list
 of stimuli will determine what sub flavor will be presented to the subjects of
 this experiment.
 
@@ -45,10 +45,10 @@ you would want to, however, we strongly suggest making one type of trial for all
 practice and test stimuli.
 
 # Getting started
-People _affiliated with our lab_ can use the information
-[from our lab webiste](https://uilots-labs.wp.hum.uu.nl/experiments/overview/)
+People _affiliated with ILS labs_ can use the information
+[from our lab webiste](https://ils-labs.wp.hum.uu.nl/experiments/overview/)
 and expand the "Online experiments using jsPsych" section for details. Please
-follow [this how-to](https://uilots-labs.wp.hum.uu.nl/how-to/online-experimenting/).
+follow [this how-to](https://ils-labs.wp.hum.uu.nl/how-to/online-experimenting/).
 
 ## Make your experiment ready for use with the data server
 ### Update access key
@@ -56,7 +56,7 @@ In the file `globals.js` is a variable:
 ```javascript
 const ACCESS_KEY = '00000000-0000-0000-0000-000000000000';
 ```
-Before uploading your experiment to the UiL-OTS data server, you will need to
+Before uploading your experiment to the ILS data server, you will need to
 change this to the access key that you obtained when your experiment was
 approved. For elaborate info see `globals.js`.
 
