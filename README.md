@@ -52,7 +52,7 @@ follow [this how-to](https://ils-labs.wp.hum.uu.nl/how-to/online-experimenting/)
 
 ## Make your experiment ready for use with the data server
 ### Update access key
-In the file `globals.js` is a variable:
+The file `globals.js` contains a variable:
 ```javascript
 const ACCESS_KEY = '00000000-0000-0000-0000-000000000000';
 ```
@@ -131,13 +131,13 @@ const LIST_1 = [
     }
 ]
 ```
-So this is not as long as one might be scared of ;-).
+So this is not as long as one might fear ;-).
 
 ## In case of using auditory stimuli as prime or target word
-In the boilerplate experiment is a *soundtest* stimulus. This sound test is done
-in order for the participant to adjust their sound settings on to a comfortable
-sound level. This ensures stimuli are not presented to loud or
-to soft. This "test" is skipped when your stimulus list does not contain
+The boilerplate experiment contains a *soundtest* stimulus. This sound test is done
+in order for the participant to adjust their sound settings to a comfortable
+sound level. This ensures stimuli are not presented too loud or
+too soft. This "test" is skipped when your stimulus list does not contain
 auditory stimuli.
 
 In the `sounds` folder there is a stimulus called **"sound_test.mp3"**. The
@@ -148,7 +148,7 @@ The replacement is recorded in a similar fashion as your test stimuli and
 then their sound volume will be roughly equivalent.
 
 If you need to change the name of the stimulus, e.g. to `sound_test.wav`, you
-need to make the experiment aware of this change. In the file `globals.js` is
+will need to make the experiment aware of this change. In the file `globals.js` is
 the following variable:
 
 ```javascript
@@ -204,7 +204,7 @@ this:
 
 Some of the output variables may be present or absent based on the
 changes you've made to the experiment, e.g. when you don't present a prime, it
-won't be in the output. They have a checkmark in the conditional column.
+won't be in the output. These have a checkmark in the conditional column.
 
 | Variable name (key) | conditional | Description          | Unit   | Type        | Comments                                              | jsPsych default |
 |---------------------|-------------|----------------------|--------|-------------|-------------------------------------------------------|-----------------|
