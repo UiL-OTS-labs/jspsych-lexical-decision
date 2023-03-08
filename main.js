@@ -277,7 +277,7 @@ function initExperiment(stimuli) {
 function main() {
     // Make sure you've updated your key in globals.js
     uil.setAccessKey(ACCESS_KEY);
-    uil.stopIfExperimentClosed(ACCESS_KEY);
+    uil.stopIfExperimentClosed();
 
     // Option 1: client side balancing:
     let stimuli = pickRandomList();
