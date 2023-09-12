@@ -2,27 +2,28 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        
+
         <title>Auditory Lexical Decision Experiment with Masked Visual Prime</title>
 
         <script src="https://web-experiments.lab.hum.uu.nl/jspsych/7.0.0/jspsych.js"></script>
         <script src="https://web-experiments.lab.hum.uu.nl/jspsych/7.0.0/plugin-html-keyboard-response.js"></script>
         <script src="https://web-experiments.lab.hum.uu.nl/jspsych/7.0.0/plugin-html-button-response.js"></script>
-        
+
         <!-- Audio playback &response libraries (audio) -->
         <script src="https://web-experiments.lab.hum.uu.nl/jspsych/7.0.0/plugin-audio-button-response.js"></script>
         <script src="https://web-experiments.lab.hum.uu.nl/jspsych/7.0.0/plugin-audio-keyboard-response.js"></script>
         <script src="https://web-experiments.lab.hum.uu.nl/jspsych/7.0.0/plugin-preload.js"></script>
-        
+
        <!-- Generic check/ask libraries (instructions & surveys) -->
         <script src="https://web-experiments.lab.hum.uu.nl/jspsych/7.0.0/plugin-instructions.js"></script>
         <script src="https://web-experiments.lab.hum.uu.nl/jspsych/7.0.0/plugin-survey-html-form.js"></script>
+        <script src="https://web-experiments.lab.hum.uu.nl/jspsych/7.0.0/plugin-survey-text.js"></script>
         <script src="https://web-experiments.lab.hum.uu.nl/jspsych/7.0.0/plugin-survey-multi-choice.js"></script>
         <script src="https://web-experiments.lab.hum.uu.nl/jspsych/7.0.0/plugin-survey-multi-select.js"></script>
-        
+
         <!-- Generic jspsych style sheet -->
         <link href="https://web-experiments.lab.hum.uu.nl/jspsych/7.0.0/jspsych.css" rel="stylesheet" type="text/css"/>
-        
+
         <!-- UU fonts -->
         <link href=https://web-experiments.lab.hum.uu.nl/jspsych/uil-utils/0.1/fonts.css rel="stylesheet" type="text/css"/>
 
@@ -41,8 +42,8 @@
         <script src="main.js"></script>
 
         <style>
-            .stimulus { 
-                font-size: 30px; 
+            .stimulus {
+                font-size: 30px;
                 font-family: monospace;
                 font-weight: normal;
             }
@@ -101,7 +102,7 @@
                 text-align: left !important;
             }
 
-            /* valid input feedback (survey) */ 
+            /* valid input feedback (survey) */
 
             input:invalid + span::after {
                 content: '✖';
@@ -124,7 +125,7 @@
     </head>
     <body></body>
     <script>
-    
+
     // Wait until the browser has loaded all files, then execute the
     // contents of the main method
     window.addEventListener('load', main);
