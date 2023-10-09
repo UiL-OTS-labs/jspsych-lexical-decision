@@ -100,7 +100,17 @@ let feedback_screen = {
     preamble: FEEDBACK_PREAMBLE,
     questions: [
 	{prompt: FEEDBACK_PROMPT, rows: 5},
-    ]
+    ],
+    on_load: function() {
+        uil.saveJson(jsPsych.data.get().json(), ACCESS_KEY);
+    },
+    on_finish: function(data) {
+        let payload = {
+            feedback: data.response,
+            ...jsPsych.data.dataProperties // adds subject id and list info
+        }
+        uil.saveJson(JSON.stringify(payload), ACCESS_KEY);
+    }
 };
 
 let end_screen = {
@@ -113,9 +123,6 @@ let end_screen = {
             data.rt = Math.round(data.rt);
         }
     },
-    on_load : function() {
-        uil.saveData(ACCESS_KEY);
-    }
 };
 
 
