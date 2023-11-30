@@ -60,201 +60,128 @@ class ParticipantInfo {
 
 let participant_info = new ParticipantInfo();
 
-const PREPARE_FOR_SURVEY = "<h1>Please answer some questions first</h1>";
+let survey_1 = {
+    type: IlsSurveyPlugin,
+    fields: {
+        birth_year: {label: 'Birth year'},
+        birth_month: {label: 'Month'},
+        native_language: {label: 'Native language'},
+    },
+    html: `
+    <h4>Please answer some questions</h4>
+    <div style="text-align: left">
+	<p>In what year were you born?</p>
+	<div>
+            <input type="number" name="birth_year" required>
+	</div>
+	<p>In what month were you born?</p>
+	<div>
+            <input type="number" name="birth_month" required>
+	</div>
+	<p>What is your native language?</p>
+	<div>
+            <input type="text" name="native_language" required>
+	</div>
+    </div>
+    <div style="margin: 20px">
+        <button class="jspsych-btn">Continue</button>
+    </div>
+    `,
+    exclusion: function(data) {
+	// return true when participant should be excluded
 
-// experiment: one can use the UU style for the HTML survey plugin by appending the style below...
-// however, this is not as of yet possible in the second type of survey plugin
-// might be solved with milestone with things discussed here:
-// https://github.com/jspsych/jsPsych/issues/554#event-3434758022 
+        let currentYear = (new Date()).getFullYear();
+        let age = currentYear - parseInt(data.birth_year, 10);
 
+        // reject participants younger than 18
+	if (age < 18) {
+	    return true;
+	}
 
-// with other survey plugin(s) than html, UU styling is more of a  hassle
-// we should discuss css presets for UU/UiL at some point.
+        // reject participants older than 80
+	if (age > 80) {
+	    return true;
+	}
 
-const MULTI_CHOICE_HTML =`
-    <div class="survey">
+	// accept participant otherwise
+	return false
+    },
+}
 
-    <label for="birth_year">In what year were you born? </label>
-    <input type="number" id="birth_year" 
-        name="birth_year" placeholder=1999 min=1919 max=2019 required>
-    <span class="validity"></span>
+let survey_2 = {
+    type: IlsSurveyPlugin,
+    fields: {
+        multilingual: {label: 'Multilingual environment', options: {yes: "Yes", no: "No"}},
+        dyslexia: {label: 'Dyslexia', options: {yes: "Yes", no: "No"}},
+	handedness: {label: 'Handedness', options: {right: "Right", left: "Left"}},
+	sex: {label: 'Biological sex', options: {male: "Male", female: "Female", other: "Other", unspecified: "Unspecified"}},
+    },
+    exclusion: function(data) {
+	// return true when participant should be excluded
+	if (data.dyslexia == 'yes') {
+	    return true;
+	}
+	// accept participant otherwise
+	return false
+    },
+    html: `
+    <div style="text-align: left">
+        <p>Were you born and raised in a multilingual environment?</p>
+        <label><input type="radio" name="multilingual" value="yes" required/>Yes</label>
+        <label><input type="radio" name="multilingual" value="no" required/>No</label>
 
+	<p>Which hand do you prefer to write with?
+            <span class="info-toggle">🛈</span>
+            <span class="info">
+                We ask this because left or right handedness (the hand you primarily write with) is associated with
+                differences in the brain, which could also influence how the brain handles language. Most studies therefore
+                report at the group level how many left and right-handed people participated in a study. Sometimes the
+                results are also analyzed per group. For tasks measuring reaction time, we may also ask you to give a
+                certain response with your dominant hand.
+            </span>
+        </p>
+	<div>
+	    <label><input type="radio" name="handedness" value="right" required/>Right</label>
+	    <label><input type="radio" name="handedness" value="left" required/>Left</label>
+	</div>
 
-    <br>
-    <br>
+        <p>What is your biological sex?
+            <span class="info-toggle">🛈</span>
+            <span class="info">
+                We ask this because sex hormones influence the development and functioning of the brain, and may also
+                influence how the brain deals with language. Most studies therefore report at the group level how many
+                biological males and how many biological females participated. Sometimes the results are also analyzed
+                per group. You do not have to share your biological sex with us, but it is useful for our reports if you
+                do.
+            </span>
+        </p>
+	<div>
+	    <label><input type="radio" name="sex" value="male" required/>Male</label>
+	    <label><input type="radio" name="sex" value="female" required/>Female</label>
+	    <label><input type="radio" name="sex" value="other" required/>Other</label>
+	    <label><input type="radio" name="sex" value="unspecified" required/>Prefer not to say</label>
+	</div>
 
-    <label for="birth_month">In what month were you born? </label>
-    <input type="number" id="birth_month" name="birth_month" 
-        placeholder=7 min=1 max=12 required>
-    <span class="validity"></span>
-
-    <br>
-    <br>
-
-    <label for="native_language">What is your native language?</label>
-    <input type="text" id="native_language" name="native_language"
-        placeholder="Dutch" required>
-    <span class="validity"></span>
-    <br> 
-    <br> 
+	<p>Are you dyslexic?
+            <span class="info-toggle">🛈</span>
+	    <span class="info">
+		We ask this because dyslexia affects how the brain processes language (including spoken language).
+	    </span>
+	</p>
+	<div>
+	    <label><input type="radio" name="dyslexia" value="yes" required/>Yes</label>
+	    <label><input type="radio" name="dyslexia" value="no" required/>No</label>
+	</div>
+    </div>
+    <div style="margin: 20px">
+        <button class="jspsych-btn">Continue</button>
     </div>
     `
-
-// these constants are used in the survery multip[le choice block]
-// with this survey plugin, UU styling is not easy to implement
-const BILINGUAL_QUESTION = `
-    Were you born and raised in a  
-    <a href="https://en.wikipedia.org/wiki/Multilingualism" target="_blank">multilingual</a>
-    environment?
-    `;
-const BILINGUAL_OPTIONS = [NO_BUTTON_TEXT, YES_BUTTON_TEXT];
-
-const DYSLEXIC_QUESTION = `Are you 
-    <a href="https://en.wikipedia.org/wiki/Dyslexia" target="_blank">dyslexic</a>?
-    `;
-const DYSLEXIC_OPTIONS = [NO_BUTTON_TEXT, YES_BUTTON_TEXT];
-
-const SEX_QUESTION = `
-    What is your
-    <a href="https://en.wikipedia.org/wiki/Sex" target="_blank">biological sex</a>?
-    `;
-const SEX_OPTIONS = [
-    GENDER_FEMALE, GENDER_MALE, GENDER_OTHER, GENDER_PREFER_NOT_SAY
-];
-const GENDER_OPTION_MAP = {
-    [GENDER_FEMALE] : ParticipantInfo.FEMALE,
-    [GENDER_MALE] : ParticipantInfo.MALE,
-    [GENDER_OTHER] : ParticipantInfo.GENDER_OTHER,
-    [GENDER_PREFER_NOT_SAY] : ParticipantInfo.GENDER_UNSPECIFIED
-};
-
-const HAND_QUESTION = 'Which hand do you prefer to write with?';
-const HAND_OPTIONS = [LEFT_TEXT, RIGHT_TEXT];
-
-const HAND_OPTIONS_MAP = {
-    [LEFT_TEXT]: ParticipantInfo.LEFT,
-    [RIGHT_TEXT]: ParticipantInfo.RIGHT
-};
-
-
-// The multi-choice survey plugin DOES have built-in validation, which is nice
-let survey_multi_choice_block = {
-    type: jsPsychSurveyMultiChoice,
-    data: {
-        survey_data_flag: true
-    },
-    questions: [
-        {
-            prompt: BILINGUAL_QUESTION,
-            name: 'Multilingual',
-            options: BILINGUAL_OPTIONS,
-            required:true,
-            horizontal: true
-        },
-        {
-            prompt: DYSLEXIC_QUESTION,
-            name: 'Dyslexic',
-            options: DYSLEXIC_OPTIONS,
-            required: true,
-            horizontal: true
-        },
-        {
-            prompt: SEX_QUESTION,
-            name:'Sex',
-            options: SEX_OPTIONS,
-            required: true,
-            horizontal: true
-        },
-        {
-            prompt: HAND_QUESTION,
-            name:'HandPreference',
-            options: HAND_OPTIONS,
-            required: true,
-            horizontal: true
-        }
-    ],
-    on_finish : function(data) {
-        let response = data.response;
-        participant_info.gender = GENDER_OPTION_MAP[response.Sex];
-        participant_info.hand_pref = HAND_OPTIONS_MAP[response.HandPreference];
-        if (typeof data.rt === "number") {
-            data.rt = Math.round(data.rt);
-        }
-    }
-};
-
-// HTML plugin survey block: questions are in the HTML constant
-let survey_multi_html_block = {
-    type: jsPsychSurveyHtmlForm,
-    preamble: PREPARE_FOR_SURVEY,
-    html: MULTI_CHOICE_HTML,
-    on_finish : function(data) {
-        if (typeof data.rt === "number") {
-            data.rt = Math.round(data.rt);
-        }
-    }
-};
-
-let survey_review_survey_data = {
-    type: jsPsychHtmlButtonResponse,
-    stimulus: function(data){
-
-        let survey_1 = 
-            jsPsych.data.get().last(2).values()[0].response;
-        
-        let survey_2 = 
-            jsPsych.data.get().last(1).values()[0].response;
-        
-        let b_year      = survey_1.birth_year;
-        let b_month     = survey_1.birth_month;
-        let n_lang      = survey_1.native_language;
-
-        let bilingual   = survey_2.Multilingual;
-        let dyslexic    = survey_2.Dyslexic;
-        let sex         = survey_2.Sex;
-        let hand_pref   = survey_2.HandPreference;
-
-        return `
-            <h1>Your data</h1>
-            <div class='survey'>
-
-            <div><strong>Birth year</strong>: ${b_year} </div>
-            <div><strong>Birth month</strong>: ${b_month} </div>
-            <div><strong>Native language</strong>: ${n_lang} </div>
-            <div><strong>Multilingual</strong>: ${bilingual} </div>
-            <div><strong>Dyslexic</strong>: ${dyslexic} </div>
-            <div><strong>Sex</strong>: ${sex} </div>
-            <div><strong>Hand preference</strong>: ${hand_pref} </div>
-            <br><br>
-
-            <p>Is this information correct?</p>
-            </div>
-            `;
-    },
-    choices: [YES_BUTTON_TEXT, NO_BUTTON_TEXT],
-    response_ends_trial: true,
-    on_finish: function(data){
-        // Repeat the survey if yes (0) was not pressed.
-        // this may give multiple entries, up to the researcher to filter out
-        repeat_survey = data.response !== 0;
-        if (typeof data.rt === "number") {
-            data.rt = Math.round(data.rt);
-        }
-    }
-};
+}
 
 let survey_procedure = {
     timeline: [
-        survey_multi_html_block, // uu style
-        survey_multi_choice_block, // default style (see index.html styling section)
-        survey_review_survey_data,
+        survey_1,
+        survey_2
     ],
-    loop_function: function(){
-        if (repeat_survey === true){
-            return true;
-        } else {
-            return false;
-        }
-    }
 };
-
