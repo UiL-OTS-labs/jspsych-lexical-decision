@@ -131,7 +131,7 @@ let survey_2 = {
         <label><input type="radio" name="multilingual" value="no" required/>No</label>
 
 	<p>Which hand do you prefer to write with?
-            <span class="info-toggle">🛈</span>
+            <span class="info-toggle"></span>
             <span class="info">
                 We ask this because left or right handedness (the hand you primarily write with) is associated with
                 differences in the brain, which could also influence how the brain handles language. Most studies therefore
@@ -146,7 +146,7 @@ let survey_2 = {
 	</div>
 
         <p>What is your biological sex?
-            <span class="info-toggle">🛈</span>
+            <span class="info-toggle"></span>
             <span class="info">
                 We ask this because sex hormones influence the development and functioning of the brain, and may also
                 influence how the brain deals with language. Most studies therefore report at the group level how many
@@ -163,7 +163,7 @@ let survey_2 = {
 	</div>
 
 	<p>Are you dyslexic?
-            <span class="info-toggle">🛈</span>
+            <span class="info-toggle"></span>
 	    <span class="info">
 		We ask this because dyslexia affects how the brain processes language (including spoken language).
 	    </span>
