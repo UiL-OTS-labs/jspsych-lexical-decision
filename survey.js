@@ -146,7 +146,16 @@ let survey_2 = {
     <div style="margin: 20px">
         <button class="jspsych-btn">Continue</button>
     </div>
-    `
+    `,
+    on_finish : function(data) {
+        let response = data.response;
+	if (data['handedness'] == 'left') {
+	    participant_info.hand_pref = ParticipantInfo.LEFT;
+	}
+	else {
+	    participant_info.hand_pref = ParticipantInfo.RIGHT;
+	}
+    }
 }
 
 let survey_procedure = {
