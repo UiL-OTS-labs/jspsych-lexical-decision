@@ -6,28 +6,12 @@ let repeat_survey = false;
 
 
 class ParticipantInfo {
-
     _hand_pref = null;
-    birth_year = 0;
-    _gender = null;
 
     static LEFT = 0;
     static RIGHT = 1;
     static HAND_OPTIONS = new Set(
         [ParticipantInfo.RIGHT, ParticipantInfo.LEFT]
-    );
-
-    static MALE = 0;
-    static FEMALE = 1;
-    static GENDER_OTHER = 3;
-    static GENDER_UNSPECIFIED = 4;
-    static GENDER_OPTIONS = new Set(
-        [
-            ParticipantInfo.MALE,
-            ParticipantInfo.FEMALE,
-            ParticipantInfo.GENDER_OTHER,
-            ParticipantInfo.GENDER_UNSPECIFIED
-        ]
     );
 
     set hand_pref(value) {
@@ -41,20 +25,6 @@ class ParticipantInfo {
 
     get hand_pref() {
         return this._hand_pref;
-    }
-
-    set gender(value) {
-        if (ParticipantInfo.GENDER_OPTIONS.has(value)) {
-            this._gender = value;
-        }
-        else {
-            let msg = `Value "${value}" not in ParticipantInfo.GENDER_OPTIONS`
-            throw new RangeError(msg);
-        }
-    }
-
-    get gender() {
-        return this._gender;
     }
 }
 
