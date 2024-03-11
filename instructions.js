@@ -11,7 +11,7 @@ const GENERIC_CHECK = `
     <br>
     <ul>
     <li>Run this on a Laptop or Desktop computer, <b>not</b> on a phone or a tablet!</li>
-    <li>Have a <b>real keyboard</b> working.</li><li>Have a <b>mouse</b> and/or 
+    <li>Have a <b>real keyboard</b> working.</li><li>Have a <b>mouse</b> and/or
     <b>trackpad</b> that works.</li>
     <li>Have your browser's audio enabled and your volume on.</li>
     </ul>
@@ -72,3 +72,11 @@ const DEBRIEF_MESSAGE = `
     <h2>Thank you for participating!</h2>
     `;
 
+
+const FEEDBACK_PREAMBLE = `
+    <p>The experiment is now complete. <strong>Please do not close this window yet.</strong></p>
+    `;
+
+const FEEDBACK_PROMPT = `
+    Do you have any further comments or feedback about the experiment? If not, please leave empty
+    `;

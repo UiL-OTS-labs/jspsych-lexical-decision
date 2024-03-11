@@ -149,8 +149,8 @@ let consent_block = {
     required_message: IF_REQUIRED_FEEDBACK_MESSAGE,
     questions: [
         {
-            prompt: "", 
-            options: [CONSENT_STATEMENT], 
+            prompt: "",
+            options: [CONSENT_STATEMENT],
             horizontal: true,
             required: false,
             button_label: PROCEED_BUTTON_TEXT,

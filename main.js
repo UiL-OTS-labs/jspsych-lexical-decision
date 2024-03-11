@@ -95,6 +95,24 @@ let well_done_screen = {
     }
 };
 
+let feedback_screen = {
+    type: jsPsychSurveyText,
+    preamble: FEEDBACK_PREAMBLE,
+    questions: [
+	{prompt: FEEDBACK_PROMPT, rows: 5},
+    ],
+    on_load: function() {
+        uil.saveJson(jsPsych.data.get().json(), ACCESS_KEY);
+    },
+    on_finish: function(data) {
+        let payload = {
+            feedback: data.response,
+            ...jsPsych.data.dataProperties // adds subject id and list info
+        }
+        uil.saveJson(JSON.stringify(payload), ACCESS_KEY);
+    }
+};
+
 let end_screen = {
     type: jsPsychHtmlButtonResponse,
     stimulus: DEBRIEF_MESSAGE,
@@ -105,9 +123,6 @@ let end_screen = {
             data.rt = Math.round(data.rt);
         }
     },
-    on_load : function() {
-        uil.saveData(ACCESS_KEY);
-    }
 };
 
 
@@ -235,16 +250,16 @@ function initExperiment(stimuli) {
     timeline.push(start_screen);
 
     timeline.push(maybe_preload_audio);
-    
+
     // Informed consent (consent.js)
-    timeline.push(consent_procedure);  
-    
+    timeline.push(consent_procedure);
+
     // survey (survey.js)
     timeline.push(survey_procedure);
-    
+
     // kb layout
     timeline.push(select_keyboard_layout);
-    
+
     // kb important keys (keyboard.js)
     timeline.push(keyboard_set_key_left_procedure);
     timeline.push(keyboard_set_key_right_procedure);
@@ -257,7 +272,7 @@ function initExperiment(stimuli) {
 
     // a keyboard dominant hand configured key continue/prepare flow
     timeline.push(participant_keyboard_control_start);
-    
+
     timeline.push(practice_procedure);
     timeline.push(well_done_screen);
 
@@ -265,7 +280,8 @@ function initExperiment(stimuli) {
     timeline.push(participant_keyboard_control_start);
 
     timeline.push(trial_procedure);
-    
+
+    timeline.push(feedback_screen);
     timeline.push(end_screen);
 
     // Start jsPsych when running on a Desktop or Laptop style pc.
@@ -289,5 +305,3 @@ function main() {
      //     initExperiment(stimuli);
      // });
 }
-
-
